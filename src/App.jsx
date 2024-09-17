@@ -1,18 +1,24 @@
 import Button from '@mui/material/Button'
+import { useColorScheme } from '@mui/material/styles'
 import './App.css'
-import ThreeDRotation from '@mui/icons-material/ThreeDRotation'
-import AddIcon from '@mui/icons-material/Add'
-import Typography  from '@mui/material/Typography'
+
+function ModeToggle() {
+  const { mode, setMode } = useColorScheme();
+  return (
+    <Button
+      onClick={() => {
+        setMode(mode === 'light' ? 'dark' : 'light');
+      }}
+    >
+      {mode === 'light' ? 'Turn dark' : 'Turn light'}
+    </Button>
+  )
+}
 function App() {
   return (
     <>
       <div>Dang Ngoc Thuan</div>
-      <Typography variant="h2" color='text.secondary' >Test Typography</Typography>
-      <Typography variant="text" color='text.secondary'>Text</Typography>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
-      <AddIcon/>
-      <ThreeDRotation/>
+      <ModeToggle/>
     </>
   )
 }
