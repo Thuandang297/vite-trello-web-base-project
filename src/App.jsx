@@ -8,6 +8,7 @@ import Select from '@mui/material/Select'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
+import Container from '@mui/material/Container'
 
 function SelectMode () {
   const { mode, setMode } = useColorScheme('')
@@ -51,9 +52,27 @@ function SelectMode () {
 
 function App() {
   return (
-    <>
-      <SelectMode/>
-    </>
+    <Container maxWidth='false' disableGutters sx={{ height:'100vh', backgroundColor:'primary.main'}}>
+      <Box sx={{
+        width:'100%',
+        backgroundColor:'primary.light',
+        height:( theme ) => theme.trello.appBarHeight,
+        display: 'flex',
+        alignItems: 'center' }}>
+        <SelectMode/>
+      </Box>
+      <Box sx={{ width:'100%',
+        backgroundColor:'primary.dark',
+        height: ( theme ) => theme.trello.boardBarHeigth,
+        display: 'flex',
+        alignItems: 'center' }}></Box>
+
+      <Box sx={{
+        width:'100%',
+        backgroundColor:'primary.main',
+        height:theme => `calc(100vh- ${theme.trello.appBarHeight} - ${theme.trello.boardBarHeigth})`
+      }}></Box>
+    </Container>
   )
 }
 
