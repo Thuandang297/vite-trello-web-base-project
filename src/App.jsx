@@ -29,17 +29,17 @@ function SelectMode () {
           onChange={handleChange}
         >
           <MenuItem value={'light'}>
-            <Box sx={{ display:'flex', alignItems: 'center', gap:'8px' }} >
+            <Box sx={{ display:'flex', alignItems: 'center', gap:1 }} >
               <LightModeIcon fontSize='small' />Light
             </Box>
           </MenuItem>
           <MenuItem value={'dark'} >
-            <Box sx={{ display:'flex', alignItems: 'center', gap:'8px' }} >
+            <Box sx={{ display:'flex', alignItems: 'center', gap:1 }} >
               <DarkModeIcon fontSize='small' />Dark
             </Box>
           </MenuItem>
           <MenuItem value={'system'} >
-            <Box sx={{ display:'flex', alignItems: 'center', gap:'8px' }} >
+            <Box sx={{ display:'flex', alignItems: 'center', gap:1 }} >
               <SettingsSuggestIcon fontSize='small' />System
             </Box>
           </MenuItem>
