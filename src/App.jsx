@@ -1,5 +1,5 @@
 import './App.css'
-import Board from './pages/Boards/_id'
+import Board from '~/pages/Boards/_id'
 function App() {
   return (
     //Router
