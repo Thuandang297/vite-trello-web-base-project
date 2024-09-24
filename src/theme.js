@@ -5,6 +5,7 @@ export const theme = extendTheme({
     appBarHeight: '58px',
     boardBarHeigth: '60px'
   },
+
   colorSchemes: {
     light: {
       palette: {
@@ -18,8 +19,45 @@ export const theme = extendTheme({
     dark: {
       palette: {
         primary: {
-          main: '#111'
+          main: '#086b58',
+          light: '#fff'
         }
+      }
+    }
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '1rem',
+          textTransform: 'none'
+        }
+      }
+    },
+    MuiOutlinedInput:{
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem',
+          '.MuiOutlinedInput-notchedOutline':{
+            borderColor: theme.palette.primary.main
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main // Change on hover
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main,
+            borderWidth:'1px'// Change when focused
+          }
+        })
+      }
+    },
+    MuiInputLabel:{
+      styleOverrides:{
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize:'0.875rem'
+        })
       }
     }
   }

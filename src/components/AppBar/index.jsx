@@ -28,7 +28,7 @@ function AppBar() {
       <Box sx={{ display: 'flex', alignItems:'center' }} gap={2} >
         <AppsIcon sx={{ color:'primary.main' }}/>
         <Box sx={{ display: 'flex', alignItems:'center' }} gap={0.5}>
-          <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color:'primary.main' }} />
+          <SvgIcon component={TrelloIcon} inheritViewBox fontSize='small' sx={{ color:'primary.main' }} />
           <Typography variant='span' sx={{fontSize:'1.2', color:'primary.main', fontWeight:'bold' }}>Trello</Typography>
         </Box>
         <Workspaces/>
@@ -42,7 +42,7 @@ function AppBar() {
         <SelectMode/>
         <Tooltip title="Notifications">
           <Badge badgeContent={3} color="primary">
-            <NotificationsNoneIcon sx={{ cursor: 'pointer' }} color="action" />
+            <NotificationsNoneIcon sx={{ cursor: 'pointer', color: 'primary.main' }}/>
           </Badge>
         </Tooltip>
         <Tooltip title="Help">

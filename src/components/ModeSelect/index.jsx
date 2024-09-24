@@ -16,7 +16,7 @@ function SelectMode() {
   }
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <FormControl sx={{ minWidth: 120 }} size="small">
         <InputLabel size='small' id="demo-simple-select-label">Mode</InputLabel>
         <Select
           labelId="demo-select-small-label"
