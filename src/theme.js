@@ -5,7 +5,6 @@ export const theme = extendTheme({
     appBarHeight: '58px',
     boardBarHeigth: '60px'
   },
-
   colorSchemes: {
     light: {
       palette: {
@@ -26,6 +25,26 @@ export const theme = extendTheme({
     }
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          '*::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px'// Adjust scrollbar width
+          },
+          '*::-webkit-scrollbar-track': {
+            backgroundColor: '#f0f0f0' // Scrollbar background
+          },
+          '*::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgb(157 153 153 / 87%)', // Scrollbar thumb color
+            borderRadius: '8px'
+          },
+          '*::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#5b6a70'
+          }
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         root: {
