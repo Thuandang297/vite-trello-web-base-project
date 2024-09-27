@@ -15,6 +15,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Tooltip from '@mui/material/Tooltip'
 import Profiles from './Menus/Profiles'
+import QueueIcon from '@mui/icons-material/Queue'
 function AppBar() {
   return (
     <Box sx={{
@@ -41,7 +42,7 @@ function AppBar() {
           <Templates />
         </Box>
 
-        <Button variant="outlined">Create</Button>
+        <Button variant="outlined" endIcon={<QueueIcon />}>Create</Button>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap:2 }} >
         <TextField id="outlined-search" label="Search..." size='small' type="search" sx={{ minWidth: '120px' }} />

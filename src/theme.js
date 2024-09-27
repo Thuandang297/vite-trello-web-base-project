@@ -19,7 +19,8 @@ export const theme = extendTheme({
       palette: {
         primary: {
           main: '#086b58',
-          light: '#fff'
+          light: '#fff',
+          dark: '#333'
         }
       }
     }
@@ -78,7 +79,17 @@ export const theme = extendTheme({
           fontSize:'0.875rem'
         })
       }
-    }
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem',
+          fontWeight:'bold',
+          // 'backgroundColor':'#333'
+        })
+      }
+    },
   }
 })
 
