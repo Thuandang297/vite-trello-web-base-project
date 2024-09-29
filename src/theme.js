@@ -1,17 +1,23 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
+const APP_BAR_HEIGHT = '58px'
+const BOARD_BAR_HEIGHT = '60px'
+const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
+
 export const theme = extendTheme({
-  trello:{
-    appBarHeight: '58px',
-    boardBarHeigth: '60px'
+  trello: {
+    appBarHeight: APP_BAR_HEIGHT,
+    boardBarHeigth: BOARD_BAR_HEIGHT,
+    boardContentHeight: BOARD_CONTENT_HEIGHT
   },
   colorSchemes: {
     light: {
       palette: {
         primary: {
           main: '#03a9f4',
-          light:'#fff',
-          dark:'#333'
+          light: '#fff',
+          dark: '#333',
+          textColor:'#03a9f4'
         }
       }
     },
@@ -19,29 +25,34 @@ export const theme = extendTheme({
       palette: {
         primary: {
           main: '#086b58',
-          light: '#fff',
-          dark: '#333'
+          light: '#2d2d2d',
+          dark: '#333',
+          textColor: '#fff'
         }
       }
     }
   },
+
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
           '*::-webkit-scrollbar': {
             width: '8px',
-            height: '8px'// Adjust scrollbar width
+            height: '7px'// Adjust scrollbar width
           },
           '*::-webkit-scrollbar-track': {
-            backgroundColor: '#f0f0f0' // Scrollbar background
+            backgroundColor: '#f0f0f0',
+            borderRadius: '8px',
+            margin: '8px' // Scrollbar background,
           },
           '*::-webkit-scrollbar-thumb': {
-            backgroundColor: 'rgb(157 153 153 / 87%)', // Scrollbar thumb color
-            borderRadius: '8px'
+            backgroundColor: '#dad8d8', // Scrollbar thumb color
+            borderRadius: '8px',
           },
           '*::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#5b6a70'
+            backgroundColor: '#b6b3b3',
+            height: '10px'
           }
         }
       }
@@ -54,12 +65,12 @@ export const theme = extendTheme({
         }
       }
     },
-    MuiOutlinedInput:{
+    MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }) => ({
           color: theme.palette.primary.main,
           fontSize: '0.875rem',
-          '.MuiOutlinedInput-notchedOutline':{
+          '.MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.primary.main
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
@@ -67,16 +78,16 @@ export const theme = extendTheme({
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.primary.main,
-            borderWidth:'1px'// Change when focused
+            borderWidth: '1px'// Change when focused
           }
         })
       }
     },
-    MuiInputLabel:{
-      styleOverrides:{
+    MuiInputLabel: {
+      styleOverrides: {
         root: ({ theme }) => ({
           color: theme.palette.primary.main,
-          fontSize:'0.875rem'
+          fontSize: '0.875rem'
         })
       }
     },
@@ -85,11 +96,30 @@ export const theme = extendTheme({
         root: ({ theme }) => ({
           color: theme.palette.primary.main,
           fontSize: '0.875rem',
-          fontWeight:'bold',
-          // 'backgroundColor':'#333'
+          fontWeight: 'bold',
+          
         })
       }
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: () => ({
+          '&.MuiTypography-body1': {
+            fontSize: '0.875rem'
+          }
+        })
+      }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '&.MuiCard-root': {
+            color: theme.palette.primary.textColor,
+            backgroundColor:theme.palette.primary.light
+          }
+        })
+      }
+    }
   }
 })
 
