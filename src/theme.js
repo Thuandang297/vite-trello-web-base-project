@@ -3,12 +3,15 @@ import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 const APP_BAR_HEIGHT = '58px'
 const BOARD_BAR_HEIGHT = '60px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
-
+const COLUMN_HEADER_HEIGHT = '50px'
+const COLUMN_FOOTER_HEIGHT = '56px'
 export const theme = extendTheme({
   trello: {
     appBarHeight: APP_BAR_HEIGHT,
     boardBarHeigth: BOARD_BAR_HEIGHT,
-    boardContentHeight: BOARD_CONTENT_HEIGHT
+    boardContentHeight: BOARD_CONTENT_HEIGHT,
+    columnHeaderHeight: COLUMN_HEADER_HEIGHT,
+    columnFooterHeight: COLUMN_FOOTER_HEIGHT
   },
   colorSchemes: {
     light: {
@@ -17,7 +20,7 @@ export const theme = extendTheme({
           main: '#03a9f4',
           light: '#fff',
           dark: '#333',
-          textColor:'#03a9f4'
+          textColor: '#03a9f4'
         }
       }
     },
@@ -97,7 +100,7 @@ export const theme = extendTheme({
           color: theme.palette.primary.main,
           fontSize: '0.875rem',
           fontWeight: 'bold',
-          
+
         })
       }
     },
@@ -115,7 +118,7 @@ export const theme = extendTheme({
         root: ({ theme }) => ({
           '&.MuiCard-root': {
             color: theme.palette.primary.textColor,
-            backgroundColor:theme.palette.primary.light
+            backgroundColor: theme.palette.primary.light
           }
         })
       }
