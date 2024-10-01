@@ -1,7 +1,9 @@
 import Box from '@mui/material/Box'
 import Card from './Card/Card'
 
-function ListCards() {
+function ListCards(props) {
+  const { cards }=props
+  console.log("🚀 ~ ListCards ~ cards:", cards)
   return (
     <Box sx={{
       m: '0 5px',
@@ -25,8 +27,9 @@ function ListCards() {
         backgroundColor: '#bfc2cf'
       }
     }}>
-      <Card tempotaryHideMedia ={true}/>
-      <Card />
+      {cards?.map(card =>(
+        <Card key={card._id} card={card} />
+      ))}
     </Box>
   )
 }
