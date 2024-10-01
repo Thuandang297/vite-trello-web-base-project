@@ -10,6 +10,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
+import { capitalizeFirstLetter } from '~/utils/formatter'
 const MENU_STYLE = {
   color: 'primary.main',
   // bgcolor: 'primary.light',
@@ -23,7 +24,8 @@ const MENU_STYLE = {
     bgcolor: 'primary.200'
   }
 }
-function BoardBar() {
+function BoardBar(props) {
+  const { board }=props
   return (
     <Box sx={{
       width: '100%',
@@ -41,12 +43,12 @@ function BoardBar() {
         <Chip
           icon={<SpaceDashboardIcon />}
           sx={MENU_STYLE}
-          label="Trello Office"
+          label={board?.title}
           clickable />
         <Chip
           icon={<LockIcon />}
           sx={MENU_STYLE}
-          label="Public/Private Workspace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable />
         <Chip
           icon={<AddToDriveIcon />}
