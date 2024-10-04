@@ -3,7 +3,6 @@ import Card from './Card/Card'
 
 function ListCards(props) {
   const { cards }=props
-  console.log("🚀 ~ ListCards ~ cards:", cards)
   return (
     <Box sx={{
       m: '0 5px',

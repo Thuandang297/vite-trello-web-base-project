@@ -17,8 +17,22 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
 import { mapOrder } from '~/utils/formatter'
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 const Column = (props) => {
   const { column }=props
+
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: column?._id,
+    data: { ...column }
+  })
+
+  const dndKitColumnStyles = {
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -31,15 +45,20 @@ const Column = (props) => {
   return (
     <>
       {/* Column*/}
-      <Box sx={{
-        minWidth: '300px',
-        maxWidth: '300px',
-        bgcolor: (theme) => (theme.palette.mode == 'dark' ? '#6c6c6c' : '#ebecf0'),
-        margin: 1,
-        borderRadius: '6px',
-        maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
-        height: 'fit-content'
-      }}>
+      <Box
+        ref={setNodeRef}
+        style={dndKitColumnStyles}
+        {...attributes}
+        {...listeners}
+        sx={{
+          minWidth: '300px',
+          maxWidth: '300px',
+          bgcolor: (theme) => (theme.palette.mode == 'dark' ? '#6c6c6c' : '#ebecf0'),
+          margin: 1,
+          borderRadius: '6px',
+          maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
+          height: 'fit-content'
+        }}>
         {/* Header title column */}
         <Box sx={{
           height: (theme) => (theme.trello.columnHeaderHeight),
