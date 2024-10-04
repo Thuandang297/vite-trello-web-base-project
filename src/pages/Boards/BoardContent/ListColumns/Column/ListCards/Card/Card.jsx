@@ -7,15 +7,34 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { Card as MuiCard } from '@mui/material'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 function Card(props) {
   const { card } = props
-  const shouldShowCardAction=()=>{
+
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card?._id,
+    data: { ...card }
+  })
+
+  const dndKitCardStyles = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.7 : undefined
+
+  }
+  const shouldShowCardAction = () => {
     return !!card?.memberIds?.length || !!card?.attachments?.length || !!card?.comments?.length
   }
   return (
-    <MuiCard sx={{ cursor: 'pointer', maxWidth: 345, boxShadow: '0 3px 2px rgba(0,0,0,0.2)', overflow: 'unset' }}>
+    <MuiCard
+      ref={setNodeRef}
+      style={dndKitCardStyles}
+      {...attributes}
+      {...listeners}
+      sx={{ cursor: 'pointer', maxWidth: 345, boxShadow: '0 3px 2px rgba(0,0,0,0.2)', overflow: 'unset' }}>
       {/* Box media */}
-      {card?.cover &&(<CardMedia
+      {card?.cover && (<CardMedia
         sx={{ height: 140 }}
         title={card?.title}
         image={card?.cover}
@@ -26,7 +45,7 @@ function Card(props) {
         <Typography>{card?.title}</Typography>
       </CardContent>
       {/* Box footer */}
-      {shouldShowCardAction()&&
+      {shouldShowCardAction() &&
         <CardActions sx={{ p: '0px 4px 8px 4px' }}>
           {!!card?.memberIds?.length &&
             <Button startIcon={<PeopleIcon />} size="small">{card.memberIds.length}</Button>}
