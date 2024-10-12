@@ -56,14 +56,6 @@ function BoardContent(props) {
 
   const customDropAnimation = {
     sideEffects: defaultDropAnimationSideEffects({
-      styles:
-      {
-        active: {
-          opacity: '0.5',
-          duration: 3000,
-          easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)'
-        }
-      }
     })
   }
 
@@ -102,7 +94,7 @@ function BoardContent(props) {
         //3.Take arrayMove for list card to change index of card to target index
         const listCardOrderIds = arrayMove(columnOfActiveCard.cardOrderIds, oldIndex, newIndex)
         columnOfActiveCard.cardOrderIds = listCardOrderIds
-
+        columnOfActiveCard.cards = mapOrder(columnOfActiveCard?.cards, listCardOrderIds, '_id')
         //4.Set list column again
         setOrderedColumns(curr => (curr.map(column => {
           if (column._id == columnId) return columnOfActiveCard
@@ -140,7 +132,7 @@ function BoardContent(props) {
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeItemType && null}
           {activeItemType && activeItemType === TYPE.COLUMN && <Columns column={activeItemData} />}
-          {activeItemType && activeItemType === TYPE.CARD && <Card value={activeItemData} />}
+          {activeItemType && activeItemType === TYPE.CARD && <Card card={activeItemData} />}
 
         </DragOverlay>
       </DndContext>

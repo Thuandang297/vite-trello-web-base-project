@@ -43,11 +43,11 @@ const Column = (props) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  // const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
     <>
       {/* Column*/}
-      <dix ref={setNodeRef}
+      <div ref={setNodeRef}
         style={dndKitColumnStyles}
         {...attributes}
       >
@@ -161,7 +161,7 @@ const Column = (props) => {
               backgroundColor: '#bfc2cf'
             }
           }}>
-            <ListCards cards={orderedCards} />
+            <ListCards cards={column.cards} />
           </Box>
           {/* Footer */}
           <Box sx={{
@@ -177,7 +177,7 @@ const Column = (props) => {
             </Tooltip>
           </Box>
         </Box>
-      </dix>
+      </div>
     </>
   )
 }
