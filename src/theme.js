@@ -20,7 +20,7 @@ export const theme = extendTheme({
           main: '#03a9f4',
           light: '#fff',
           dark: '#333',
-          textColor: '#03a9f4'
+          textColor: '#333'
         }
       }
     },
