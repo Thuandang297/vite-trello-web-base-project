@@ -60,8 +60,67 @@ function BoardContent(props) {
   }
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    const ordered = mapOrder(board?.columns, board?.columnOrderIds, '_id')
+    setOrderedColumns([...ordered])
   }, [board])
+
+  const findColumnByCardId = (cardId) => {
+    return orderedColumns.find(column => column?.cards?.map(card => card?._id).includes(cardId))
+  }
+
+  const handleDragStart = (event) => {
+    const { active } = event
+    const checkType = active?.data?.current?.columnId ? TYPE.CARD : TYPE.COLUMN
+    setActiveItemType(checkType)
+    setActiveItemId(active?.id)
+    setActiveItemData(active?.data?.current)
+  }
+
+  const handleDragOver = (event) => {
+    const { active, over } = event
+    if (!active || !over) return
+    if (activeItemType == TYPE.COLUMN) return
+    const { id: idActiveItem, data: { current: activeDraggingCardData } } = active
+    const { id: idOverItem, data: { current: activeOverCardData } } = over
+
+    const activeColumn = findColumnByCardId(idActiveItem)
+    const overColumn = findColumnByCardId(idOverItem)
+    if (!activeColumn || !overColumn) return
+    //If drop and drag in one column then use onDragEnd to update data after dragging
+    if (activeColumn._id == overColumn._id) return
+    const overCardIndex = overColumn?.cards?.findIndex(card => card._id == idOverItem)
+    const activeCardIndex = activeColumn?.cards?.findIndex(card => card._id == idActiveItem)
+    const isBelowOverItem =
+      over &&
+      active.rect.current.translated &&
+      active.rect.current.translated.top >
+      over.rect.top + over.rect.height
+
+    const modifier = isBelowOverItem ? 1 : 0
+
+    const newIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn.cards.length + 1
+    setOrderedColumns(prevOrderedColumn => {
+      return prevOrderedColumn?.map(column => {
+        if (column._id == overColumn._id) {
+
+          // Add active item card to over column in index newIndex
+          column.cards.splice(newIndex, 0, activeDraggingCardData)
+
+          //Update columnId for the card had move to a new column with new column id
+          column.cards = column.cards?.map(item => ({ ...item, columnId: column._id }))
+        }
+
+        //Update data in active column
+        if (column._id == activeColumn._id) {
+          // Delete active item in active column
+
+          column.cards.splice(activeCardIndex, 1)
+        }
+        column.cardOrderIds = column.cards.map(item => item._id)
+        return column
+      })
+    })
+  }
 
   const handleDragEnd = (event) => {
     const { active, over } = event
@@ -107,14 +166,6 @@ function BoardContent(props) {
     setActiveItemType(null)
   }
 
-  const handleDragStart = (event) => {
-    const { active } = event
-    const checkType = active?.data?.current?.columnId ? TYPE.CARD : TYPE.COLUMN
-    setActiveItemType(checkType)
-    setActiveItemId(active?.id)
-    setActiveItemData(active?.data?.current)
-  }
-
   return (
     <Box sx={{
       width: '100%',
@@ -126,6 +177,7 @@ function BoardContent(props) {
       <DndContext
         sensors={sensors}
         onDragEnd={handleDragEnd}
+        onDragOver={handleDragOver}
         onDragStart={handleDragStart}
       >
         <ListColumns columns={orderedColumns} />

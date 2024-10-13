@@ -20,8 +20,8 @@ function Card(props) {
   const dndKitCardStyles = {
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.7 : undefined
-
+    opacity: isDragging ? 0.5 : undefined,
+    border: isDragging ? 'solid 3px #b3ccff':undefined,
   }
   const shouldShowCardAction = () => {
     return !!card?.memberIds?.length || !!card?.attachments?.length || !!card?.comments?.length
