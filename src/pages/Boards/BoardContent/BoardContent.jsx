@@ -10,7 +10,8 @@ import {
   useSensor,
   useSensors,
   DragOverlay,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  closestCorners
 } from '@dnd-kit/core'
 import { useState, useEffect } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
@@ -176,6 +177,7 @@ function BoardContent(props) {
     }}>
       <DndContext
         sensors={sensors}
+        collisionDetection={closestCorners}
         onDragEnd={handleDragEnd}
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}
@@ -185,7 +187,6 @@ function BoardContent(props) {
           {!activeItemType && null}
           {activeItemType && activeItemType === TYPE.COLUMN && <Columns column={activeItemData} />}
           {activeItemType && activeItemType === TYPE.CARD && <Card card={activeItemData} />}
-
         </DragOverlay>
       </DndContext>
     </Box>
