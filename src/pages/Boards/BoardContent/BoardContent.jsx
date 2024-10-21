@@ -11,12 +11,17 @@ import {
   useSensors,
   DragOverlay,
   defaultDropAnimationSideEffects,
-  closestCorners
+  closestCorners,
+  pointerWithin,
+  getFirstCollision,
+  closestCenter,
+  MeasuringStrategy
 } from '@dnd-kit/core'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import Columns from './ListColumns/Column/Column'
+import { useCallback } from 'react'
 function BoardContent(props) {
   const { board } = props
   const mouseSensor = useSensor(MouseSensor, {
@@ -54,12 +59,66 @@ function BoardContent(props) {
   const [activeItemType, setActiveItemType] = useState()
   const [activeItemId, setActiveItemId] = useState()
   const [activeItemData, setActiveItemData] = useState()
-
+  const lastOverId = useRef()
   const customDropAnimation = {
-    sideEffects: defaultDropAnimationSideEffects({
-    })
+
   }
 
+  const collisionDetectionStrategy = useCallback((args) => {
+    const { droppableContainers } = args
+    //Check drag drop column
+    if (activeItemType == TYPE.COLUMN) {
+      const columnArgs = { ...args, droppableContainers: droppableContainers.filter(c => c['id'].includes('column')) }
+      return closestCorners(columnArgs)
+    }
+
+    //Check drag card
+    const pointerIntersections = pointerWithin(args) //Get intersection of poiter with items
+    if (pointerIntersections.length === 0) return
+    const intersections = pointerIntersections
+    let overId = getFirstCollision(intersections, 'id')
+    if (overId != null) {
+      if (overId.includes('column')) {
+        let columnIntersection = orderedColumns?.find(column => (column['_id'] == overId))
+        //Check if column has cards then try to make droppableContainer for cards in this column
+        if (columnIntersection?.cards?.length > 0) {
+          overId = closestCenter({
+            ...args,
+            droppableContainers: droppableContainers?.filter(card => (columnIntersection['cardOrderIds']?.includes(card['id'])
+              && card['id'] !== overId))
+          })[0]?.id
+          lastOverId.current = overId
+        }
+      }
+      //Looking for column by columnId
+      return [{ id: overId }]
+    }
+    return lastOverId.current ? [{ id: lastOverId.current }] : []
+  }, [activeItemType, orderedColumns, TYPE.COLUMN])
+
+  const updateColumnsWhenDragDropCard = (activeColumn, activeCardIndex, overColumn, overCardIndex, activeDraggingCardData) => {
+    return setOrderedColumns(prevOrderedColumn => {
+      return prevOrderedColumn?.map(column => {
+        if (column._id == overColumn._id) {
+
+          // Add active item card to over column in index newIndex
+          column.cards.splice(overCardIndex, 0, activeDraggingCardData)
+
+          //Update columnId for the card had move to a new column with new column id
+          column.cards = column.cards?.map(item => ({ ...item, columnId: column._id }))
+        }
+
+        //Delete card data in active column
+        if (column._id == activeColumn._id) {
+          // Delete active item in active column
+
+          column.cards.splice(activeCardIndex, 1)
+        }
+        column.cardOrderIds = column.cards.map(item => item._id)
+        return column
+      })
+    })
+  }
   useEffect(() => {
     const ordered = mapOrder(board?.columns, board?.columnOrderIds, '_id')
     setOrderedColumns([...ordered])
@@ -82,15 +141,24 @@ function BoardContent(props) {
     if (!active || !over) return
     if (activeItemType == TYPE.COLUMN) return
     const { id: idActiveItem, data: { current: activeDraggingCardData } } = active
-    const { id: idOverItem, data: { current: activeOverCardData } } = over
-
+    const { id: idOverItem } = over
     const activeColumn = findColumnByCardId(idActiveItem)
+    const activeCardIndex = activeColumn?.cards?.findIndex(card => card._id == idActiveItem)
+
+    //Check when overItem is column
+    if (idOverItem?.includes('column-id')) {
+      const overColumn = orderedColumns?.find(column => column._id == idOverItem)
+      const newIndex = overColumn.cards.length
+      updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
+    }
+
+    //Check when overItem is card
+
     const overColumn = findColumnByCardId(idOverItem)
     if (!activeColumn || !overColumn) return
     //If drop and drag in one column then use onDragEnd to update data after dragging
     if (activeColumn._id == overColumn._id) return
     const overCardIndex = overColumn?.cards?.findIndex(card => card._id == idOverItem)
-    const activeCardIndex = activeColumn?.cards?.findIndex(card => card._id == idActiveItem)
     const isBelowOverItem =
       over &&
       active.rect.current.translated &&
@@ -100,27 +168,7 @@ function BoardContent(props) {
     const modifier = isBelowOverItem ? 1 : 0
 
     const newIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn.cards.length + 1
-    setOrderedColumns(prevOrderedColumn => {
-      return prevOrderedColumn?.map(column => {
-        if (column._id == overColumn._id) {
-
-          // Add active item card to over column in index newIndex
-          column.cards.splice(newIndex, 0, activeDraggingCardData)
-
-          //Update columnId for the card had move to a new column with new column id
-          column.cards = column.cards?.map(item => ({ ...item, columnId: column._id }))
-        }
-
-        //Update data in active column
-        if (column._id == activeColumn._id) {
-          // Delete active item in active column
-
-          column.cards.splice(activeCardIndex, 1)
-        }
-        column.cardOrderIds = column.cards.map(item => item._id)
-        return column
-      })
-    })
+    updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
   }
 
   const handleDragEnd = (event) => {
@@ -177,7 +225,12 @@ function BoardContent(props) {
     }}>
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCorners}
+        collisionDetection={collisionDetectionStrategy}
+        measuring={{
+          droppable: {
+            strategy: MeasuringStrategy.Always,
+          }
+        }}
         onDragEnd={handleDragEnd}
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}
