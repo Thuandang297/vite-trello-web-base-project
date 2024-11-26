@@ -7,7 +7,7 @@ import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
 import { fetchBoardDetailsApi } from '~/apis'
 function Board() {
-  const [board,setBoard]=useState()
+  const [board, setBoard]=useState()
 
   useEffect(() => {
     const boardId = '673d79d8596a941c8f7de8e8'
@@ -16,8 +16,10 @@ function Board() {
   return (
     <Container maxWidth='false' disableGutters sx={{ height:'100vh', backgroundColor:'primary.main' }}>
       <AppBar/>
-      <BoardBar board={mockData.board}/>
-      <BoardContent board={mockData.board} />
+      <BoardBar board={board?.dataBoard
+}/>
+      <BoardContent board={board?.dataBoard
+} />
     </Container>
   )
 }
