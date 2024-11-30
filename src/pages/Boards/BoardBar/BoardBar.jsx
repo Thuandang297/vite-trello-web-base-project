@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { capitalizeFirstLetter } from '~/utils/formatter'
 const MENU_STYLE = {
   color: 'primary.main',
-  // bgcolor: 'primary.light',
+  bgcolor: 'primary.light',
   paddingX: '5px',
   border: 'none',
   borderRadius: '4px',
