@@ -10,7 +10,7 @@ function ListCards(props) {
         display: 'flex',
         flexDirection: 'column',
         gap: 1,
-        p: '0 5px',
+        p: '0 5px 5px 5px',
         overflowX: 'hidden',
         overflowY: 'auto',
         // maxHeight: (theme) => (`calc( ${theme.trello.boardContentHeight} - 300px)`)
