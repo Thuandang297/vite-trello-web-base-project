@@ -32,7 +32,10 @@ function Card(props) {
       style={dndKitCardStyles}
       {...attributes}
       {...listeners}
-      sx={{ cursor: 'pointer', maxWidth: 345, boxShadow: '0 3px 2px rgba(0,0,0,0.2)', overflow: 'unset' }}>
+      sx={{
+        cursor: 'pointer', maxWidth: 345, boxShadow: '0 3px 2px rgba(0,0,0,0.2)', overflow: 'unset', border: '1px solid transparent', '&:hover': {
+          borderColor: (theme) => theme.palette.primary.main
+        } }}>
       {/* Box media */}
       {card?.cover && (<CardMedia
         sx={{ height: 140 }}
