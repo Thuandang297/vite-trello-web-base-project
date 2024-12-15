@@ -34,6 +34,36 @@ const Column = (props) => {
     opacity:isDragging ? 0.5:undefined
   }
 
+  const [openCreateCard, setOpenCreateCard] = useState(false)
+  const [newCardTitle, setNewCardTitle] = useState('')
+  const toogleOpenCreateCard = () => setOpenCreateCard(!openCreateCard)
+
+  const addNewCard = () => {
+    if (!newCardTitle) {
+      console.log('empty card title')
+      return
+    }
+    console.log('Create new card', newCardTitle)
+    //Clear du lieu va dong the
+    toogleOpenCreateCard()
+    setNewCardTitle('')
+  }
+
+  const [openCreateCard, setOpenCreateCard] = useState(false)
+  const [newCardTitle, setNewCardTitle] = useState('')
+  const toogleOpenCreateCard = () => setOpenCreateCard(!openCreateCard)
+
+  const addNewCard = () => {
+    if (!newCardTitle) {
+      console.log('empty card title')
+      return
+    }
+    console.log('Create new card', newCardTitle)
+    //Clear du lieu va dong the
+    toogleOpenCreateCard()
+    setNewCardTitle('')
+  }
+
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
