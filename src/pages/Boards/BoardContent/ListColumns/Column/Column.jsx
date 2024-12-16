@@ -213,12 +213,15 @@ const Column = (props) => {
                   gap: 1
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
+                <Box
+                  data-no-dnd="true"
+                  sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
                   <TextField
                     label="Enter to add card title..."
                     size='small'
                     type="text"
                     variant='outlined'
+                    data-no-dnd="true"
                     sx={{
                       '& label': { color: 'text.primary' },
                       '& input': {
@@ -245,6 +248,7 @@ const Column = (props) => {
                     color='success'
                     size='small'
                     fontSize='small'
+                    data-no-dnd="true"
                     sx={{
                       boxShadow: 'none',
                       border: '0.5px solid',
