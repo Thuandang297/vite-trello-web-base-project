@@ -6,6 +6,7 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { useState } from 'react'
 import Column from './Column/Column'
+import { toast } from 'react-toastify'
 function ListColumns({ columns }) {
   const [openCreateColumn, setOpenCreateColumn] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
@@ -13,7 +14,16 @@ function ListColumns({ columns }) {
 
   const addNewColumn = () => {
     if (!newColumnTitle) {
-      return
+      return toast.error('It is empty column title!', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light',
+        // transition: 'Slide'
+      })
     }
     //Clear du lieu va dong the
     toogleOpenCreateColumn()
