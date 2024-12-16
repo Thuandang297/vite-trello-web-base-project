@@ -4,8 +4,8 @@ import { mapOrder } from '~/utils/formatter'
 import {
   DndContext,
   KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
+  // MouseSensor,
+  // TouchSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -22,6 +22,7 @@ import { arrayMove } from '@dnd-kit/sortable'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import Columns from './ListColumns/Column/Column'
 import { useCallback } from 'react'
+import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensor'
 function BoardContent(props) {
   const { board } = props
   const mouseSensor = useSensor(MouseSensor, {
