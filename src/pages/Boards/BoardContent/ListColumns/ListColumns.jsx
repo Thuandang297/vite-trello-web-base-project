@@ -7,12 +7,12 @@ import TextField from '@mui/material/TextField'
 import { useState } from 'react'
 import Column from './Column/Column'
 import { toast } from 'react-toastify'
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
   const [openCreateColumn, setOpenCreateColumn] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const toogleOpenCreateColumn = () => setOpenCreateColumn(!openCreateColumn)
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       return toast.error('It is empty column title!', {
         position: 'bottom-left',
@@ -21,11 +21,35 @@ function ListColumns({ columns }) {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        theme: 'light',
-        // transition: 'Slide'
+        theme: 'light'
       })
     }
-    //Clear du lieu va dong the
+    const newColumnData = {
+      title: newColumnTitle
+    }
+    await createNewColumnApi(newColumnData).then((response) => {
+      if (!response) return
+      toast.success('Creat column success!', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+      .catch((error) => {
+        toast.error('Fail to create a column!', {
+          position: 'bottom-left',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'light'
+        })
+      })
     toogleOpenCreateColumn()
     setNewColumnTitle('')
   }
@@ -42,7 +66,7 @@ function ListColumns({ columns }) {
         overflowY: 'hidden'
       }} >
         {columns?.map(column => (
-          < Column key={column?._id} column={column} />
+          < Column key={column?._id} column={column} createNewCardApi={createNewCardApi} />
         ))}
         {openCreateColumn ?
           <Box sx={{

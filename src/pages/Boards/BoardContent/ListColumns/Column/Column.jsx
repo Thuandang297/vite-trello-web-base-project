@@ -21,8 +21,9 @@ import { mapOrder } from '~/utils/formatter'
 import { useSortable } from '@dnd-kit/sortable'
 import TextField from '@mui/material/TextField'
 import { CSS } from '@dnd-kit/utilities'
+import { toast } from 'react-toastify'
 const Column = (props) => {
-  const { column } = props
+  const { column, createNewCardApi } = props
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
@@ -40,16 +41,50 @@ const Column = (props) => {
   const [newCardTitle, setNewCardTitle] = useState('')
   const toogleOpenCreateCard = () => setOpenCreateCard(!openCreateCard)
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
-      console.log('empty card title')
-      return
+      return toast.error('Emty card title!', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light'
+      })
     }
-    console.log('Create new card',newCardTitle)
-    //Clear du lieu va dong the
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column?._id
+    }
+    await createNewCardApi(newCardData).then((response) => {
+      if (!response) return
+      toast.success('Creat column success!', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+      .catch((error) => {
+        toast.error('Fail to create a column!', {
+          position: 'bottom-left',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'light'
+        })
+      })
     toogleOpenCreateCard()
     setNewCardTitle('')
   }
+
+  
 
 
   const [anchorEl, setAnchorEl] = useState(null)
