@@ -24,7 +24,7 @@ import Columns from './ListColumns/Column/Column'
 import { useCallback } from 'react'
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensor'
 function BoardContent(props) {
-  const { board } = props
+  const { board, createNewBoardApi, createNewColumnApi, createNewCardApi } = props
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -236,7 +236,7 @@ function BoardContent(props) {
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns columns={orderedColumns} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeItemType && null}
           {activeItemType && activeItemType === TYPE.COLUMN && <Columns column={activeItemData} />}
