@@ -8,6 +8,7 @@ import { useState } from 'react'
 import Column from './Column/Column'
 import { toast } from 'react-toastify'
 function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
+  console.log("🚀 ~ ListColumns ~ columns:", columns)
   const [openCreateColumn, setOpenCreateColumn] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const toogleOpenCreateColumn = () => setOpenCreateColumn(!openCreateColumn)

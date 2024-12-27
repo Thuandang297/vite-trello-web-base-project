@@ -24,7 +24,6 @@ import { CSS } from '@dnd-kit/utilities'
 import { toast } from 'react-toastify'
 const Column = (props) => {
   const { column, createNewCardApi } = props
-
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
