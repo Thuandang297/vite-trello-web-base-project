@@ -24,7 +24,7 @@ import Columns from './ListColumns/Column/Column'
 import { useCallback } from 'react'
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensor'
 function BoardContent(props) {
-  const { board, createNewBoardApi, createNewColumnApi, createNewCardApi } = props
+  const { board, createNewColumnApi, createNewCardApi } = props
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -115,7 +115,7 @@ function BoardContent(props) {
 
           column.cards.splice(activeCardIndex, 1)
         }
-        column.cardOrderIds = column.cards.map(item => item._id)
+        column.cardOrderIds = column.cards?.map(item => item._id)
         return column
       })
     })
@@ -205,7 +205,7 @@ function BoardContent(props) {
         columnOfActiveCard.cardOrderIds = listCardOrderIds
         columnOfActiveCard.cards = mapOrder(columnOfActiveCard?.cards, listCardOrderIds, '_id')
         //4.Set list column again
-        setOrderedColumns(curr => (curr.map(column => {
+        setOrderedColumns(curr => (curr?.map(column => {
           if (column._id == columnId) return columnOfActiveCard
           return column
         })))
