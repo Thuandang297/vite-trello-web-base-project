@@ -6,10 +6,11 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
 import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi } from '~/apis'
+import _ from 'lodash'
 function Board() {
   const [board, setBoard]=useState()
   useEffect(() => {
-    const boardId = '676d936255deb9d7926b86c0'
+    const boardId = '676ee44a628e9cc82c4cfd06'
     fetchBoardDetailsApi(boardId).then(response => setBoard(response))
   }, [])
 
@@ -17,23 +18,21 @@ function Board() {
     const createdBoard = await fetchCreateNewBoardApi(newBoard)
     return createdBoard
   }
-  console.log('board', board);
-
   const createNewColumnApi = async (newColumn) => {
     const newReqBody = {
       ...newColumn,
       boardId: board?.dataBoard?._id
     }
-    const { createdColumn } = await fetchCreateNewColumnApi(newReqBody)
+    const createdColumn = await fetchCreateNewColumnApi(newReqBody)
     // await fetchBoardDetailsApi(board?.dataBoard?._id).then(response => setBoard(response))
 
     //Set new item to columnOrderIdS
 
-    const newBoard = { ...board }
-    newBoard.dataBoard.columnOrderIds.push(createdColumn._id)
-    newBoard.dataBoard.columns.push(createdColumn)
+    const newBoard = _.cloneDeep(board)
+    newBoard.dataBoard?.columnOrderIds.push(createdColumn._id)
+    newBoard.dataBoard?.columns.push(createdColumn)
     setBoard(newBoard)
-    return createdColumn
+    return newBoard
   }
 
   const createNewCardApi = async (newCard) => {
@@ -43,9 +42,6 @@ function Board() {
     }
     const createdCard = await fetchCreateNewCardApi(newReqBody)
     // await fetchBoardDetailsApi(board?.dataBoard?._id).then(response => setBoard(response))
-
-
-
     return createdCard
   }
 
