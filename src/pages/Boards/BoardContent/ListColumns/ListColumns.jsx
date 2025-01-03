@@ -38,9 +38,11 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
         draggable: true,
         theme: 'light'
       })
+      toogleOpenCreateColumn()
+      setNewColumnTitle('')
     })
       .catch((error) => {
-        toast.error('Fail to create a column!', {
+        toast.error(error.message, {
           position: 'bottom-left',
           autoClose: 3000,
           hideProgressBar: false,
@@ -50,10 +52,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
           theme: 'light'
         })
       })
-    toogleOpenCreateColumn()
-    setNewColumnTitle('')
   }
-  console.log('columns::::', columns);
 
   return (
     <SortableContext items={columns?.map((column => column._id))} strategy={horizontalListSortingStrategy}>
@@ -102,7 +101,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
                 />
 
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap:1, margin:1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, margin: 1 }}>
                 <Button
                   variant='contained'
                   color='success'
@@ -112,7 +111,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
                     boxShadow: 'none',
                     border: '0.5px solid',
                     borderColor: (theme) => theme.palette.success.main,
-                    '&:hover':{
+                    '&:hover': {
                       bgcolor: (theme) => theme.palette.success.main
                     }
                   }}
@@ -124,7 +123,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
                   sx={{
                     color: 'white',
                     cursor: 'pointer',
-                    '&:hover':{
+                    '&:hover': {
                       color: (theme) => theme.palette.warning.light
                     }
                   }}
@@ -133,7 +132,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
                 />
               </Box>
             </Box>
-          </Box>:
+          </Box> :
           <Box sx={{
             minWidth: '200px',
             maxWidth: '200px',

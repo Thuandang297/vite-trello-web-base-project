@@ -82,10 +82,6 @@ const Column = (props) => {
     toogleOpenCreateCard()
     setNewCardTitle('')
   }
-
-  
-
-
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {

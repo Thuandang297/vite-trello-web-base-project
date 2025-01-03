@@ -6,12 +6,26 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
 import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi } from '~/apis'
-import _ from 'lodash'
+import _, { cloneDeep } from 'lodash'
+import { toast } from 'react-toastify'
 function Board() {
-  const [board, setBoard]=useState()
+  const [board, setBoard] = useState()
+
   useEffect(() => {
-    const boardId = '676ee44a628e9cc82c4cfd06'
-    fetchBoardDetailsApi(boardId).then(response => setBoard(response))
+    const boardId = '6776d41a2ff6748ebc8aa9f9'
+    fetchBoardDetailsApi(boardId)
+      .then(response => setBoard(response))
+      .catch((error) => {
+        toast.error(error.message, {
+          position: 'bottom-left',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'light'
+        })
+      })
   }, [])
 
   const createNewBoardApi = async (newBoard) => {
@@ -24,15 +38,11 @@ function Board() {
       boardId: board?.dataBoard?._id
     }
     const createdColumn = await fetchCreateNewColumnApi(newReqBody)
-    // await fetchBoardDetailsApi(board?.dataBoard?._id).then(response => setBoard(response))
-
-    //Set new item to columnOrderIdS
-
     const newBoard = _.cloneDeep(board)
     newBoard.dataBoard?.columnOrderIds.push(createdColumn._id)
     newBoard.dataBoard?.columns.push(createdColumn)
     setBoard(newBoard)
-    return newBoard
+    return createdColumn
   }
 
   const createNewCardApi = async (newCard) => {
@@ -40,8 +50,13 @@ function Board() {
       ...newCard,
       boardId: board?.dataBoard?._id
     }
-    const createdCard = await fetchCreateNewCardApi(newReqBody)
-    // await fetchBoardDetailsApi(board?.dataBoard?._id).then(response => setBoard(response))
+    const { createdCard } = await fetchCreateNewCardApi(newReqBody)
+    // Find column have created Card
+    const newBoard = _.cloneDeep(board)
+    const newColumn = newBoard.dataBoard.columns.find(column => column._id === newCard.columnId)
+    newColumn.cards.push(createdCard)
+    newColumn.cardOrderIds.push(createdCard._id)
+    setBoard(newBoard)
     return createdCard
   }
 
