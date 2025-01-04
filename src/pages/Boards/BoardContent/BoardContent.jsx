@@ -1,28 +1,24 @@
-import Box from '@mui/material/Box'
-import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/formatter'
 import {
-  DndContext,
-  KeyboardSensor,
-  // MouseSensor,
-  // TouchSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-  defaultDropAnimationSideEffects,
-  closestCorners,
-  pointerWithin,
-  getFirstCollision,
   closestCenter,
-  MeasuringStrategy
+  closestCorners,
+  DndContext,
+  DragOverlay,
+  getFirstCollision,
+  KeyboardSensor,
+  MeasuringStrategy,
+  PointerSensor,
+  pointerWithin,
+  useSensor,
+  useSensors
 } from '@dnd-kit/core'
-import { useState, useEffect, useRef } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
-import Card from './ListColumns/Column/ListCards/Card/Card'
-import Columns from './ListColumns/Column/Column'
-import { useCallback } from 'react'
+import Box from '@mui/material/Box'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensor'
+import { mapOrder } from '~/utils/formatter'
+import Columns from './ListColumns/Column/Column'
+import Card from './ListColumns/Column/ListCards/Card/Card'
+import ListColumns from './ListColumns/ListColumns'
 function BoardContent(props) {
   const { board, createNewColumnApi, createNewCardApi } = props
   const mouseSensor = useSensor(MouseSensor, {
@@ -58,7 +54,7 @@ function BoardContent(props) {
   }
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeItemType, setActiveItemType] = useState()
-  const [activeItemId, setActiveItemId] = useState()
+  const [, setActiveItemId] = useState()
   const [activeItemData, setActiveItemData] = useState()
   const lastOverId = useRef()
   const customDropAnimation = {
@@ -229,7 +225,7 @@ function BoardContent(props) {
         collisionDetection={collisionDetectionStrategy}
         measuring={{
           droppable: {
-            strategy: MeasuringStrategy.Always,
+            strategy: MeasuringStrategy.Always
           }
         }}
         onDragEnd={handleDragEnd}

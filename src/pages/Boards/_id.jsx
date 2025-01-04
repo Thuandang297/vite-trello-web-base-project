@@ -6,15 +6,24 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
 import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi } from '~/apis'
-import _, { cloneDeep } from 'lodash'
+import _ from 'lodash'
 import { toast } from 'react-toastify'
+import { generatePlaceHolderCard } from '~/utils/formatter'
 function Board() {
   const [board, setBoard] = useState()
-
   useEffect(() => {
-    const boardId = '6776d41a2ff6748ebc8aa9f9'
+    const boardId = '67791259500f2e2c2b7e0ac4'
     fetchBoardDetailsApi(boardId)
-      .then(response => setBoard(response))
+      .then(response => {
+        //Map them placeHolderCard cho nhung column khong chua card trong board
+        response.dataBoard.columns.forEach(column => {
+          if (_.isEmpty(column.cards)) {
+            column.cards = [generatePlaceHolderCard(column)]
+            column.cardOrderIds = [generatePlaceHolderCard(column)._id]
+          }
+        })
+        setBoard(response)
+      })
       .catch((error) => {
         toast.error(error.message, {
           position: 'bottom-left',
@@ -38,6 +47,9 @@ function Board() {
       boardId: board?.dataBoard?._id
     }
     const createdColumn = await fetchCreateNewColumnApi(newReqBody)
+    //Khi them moi column thi mac dinh them generatePlaceHolderCard vao cho column
+    createdColumn.cards = [generatePlaceHolderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceHolderCard(createdColumn)._id]
     const newBoard = _.cloneDeep(board)
     newBoard.dataBoard?.columnOrderIds.push(createdColumn._id)
     newBoard.dataBoard?.columns.push(createdColumn)

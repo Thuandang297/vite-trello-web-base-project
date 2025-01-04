@@ -51,7 +51,7 @@ export const theme = extendTheme({
           },
           '*::-webkit-scrollbar-thumb': {
             backgroundColor: '#dad8d8', // Scrollbar thumb color
-            borderRadius: '8px',
+            borderRadius: '8px'
           },
           '*::-webkit-scrollbar-thumb:hover': {
             backgroundColor: '#b6b3b3',
@@ -99,7 +99,7 @@ export const theme = extendTheme({
         root: ({ theme }) => ({
           color: theme.palette.primary.main,
           fontSize: '0.875rem',
-          fontWeight: 'bold',
+          fontWeight: 'bold'
 
         })
       }

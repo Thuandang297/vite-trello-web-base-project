@@ -1,14 +1,14 @@
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 import CommentIcon from '@mui/icons-material/Comment'
 import PeopleIcon from '@mui/icons-material/People'
-import CardMedia from '@mui/material/CardMedia'
+import { Card as MuiCard } from '@mui/material'
 import Button from '@mui/material/Button'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
-import { Card as MuiCard } from '@mui/material'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 function Card(props) {
   const { card } = props
 
@@ -16,12 +16,11 @@ function Card(props) {
     id: card?._id,
     data: { ...card }
   })
-
   const dndKitCardStyles = {
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : undefined,
-    border: isDragging ? 'solid 3px #b3ccff':undefined,
+    border: isDragging ? 'solid 3px #b3ccff' : undefined
   }
   const shouldShowCardAction = () => {
     return !!card?.memberIds?.length || !!card?.attachments?.length || !!card?.comments?.length
@@ -33,9 +32,14 @@ function Card(props) {
       {...attributes}
       {...listeners}
       sx={{
-        cursor: 'pointer', maxWidth: 345, boxShadow: '0 3px 2px rgba(0,0,0,0.2)', overflow: 'unset', border: '1px solid transparent', '&:hover': {
+        cursor: 'pointer', maxWidth: 345,
+        boxShadow: '0 3px 2px rgba(0,0,0,0.2)',
+        overflow: 'unset',
+        visibility: card.FE_PlaceholderCard == true ? 'hidden' : '',
+        border: '1px solid transparent', '&:hover': {
           borderColor: (theme) => theme.palette.primary.main
-        } }}>
+        }
+      }}>
       {/* Box media */}
       {card?.cover && (<CardMedia
         sx={{ height: 140 }}
