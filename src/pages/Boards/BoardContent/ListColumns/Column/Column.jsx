@@ -1,27 +1,26 @@
-import { useState } from 'react'
-import { Tooltip, Typography } from '@mui/material'
-import Box from '@mui/material/Box'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { Close as CloseIcon } from '@mui/icons-material'
+import AddCardIcon from '@mui/icons-material/AddCard'
 import Cloud from '@mui/icons-material/Cloud'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import ContentCut from '@mui/icons-material/ContentCut'
 import ContentPaste from '@mui/icons-material/ContentPaste'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import DragHandleIcon from '@mui/icons-material/DragHandle'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Tooltip, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import MenuItem from '@mui/material/MenuItem'
-import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import AddCardIcon from '@mui/icons-material/AddCard'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import DragHandleIcon from '@mui/icons-material/DragHandle'
-import ListCards from './ListCards/ListCards'
-import { Close as CloseIcon } from '@mui/icons-material'
-import { mapOrder } from '~/utils/formatter'
-import { useSortable } from '@dnd-kit/sortable'
+import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import { CSS } from '@dnd-kit/utilities'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
+import ListCards from './ListCards/ListCards'
 const Column = (props) => {
   const { column, createNewCardApi } = props
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -68,7 +67,7 @@ const Column = (props) => {
         theme: 'light'
       })
     })
-      .catch((error) => {
+      .catch(() => {
         toast.error('Fail to create a column!', {
           position: 'bottom-left',
           autoClose: 3000,

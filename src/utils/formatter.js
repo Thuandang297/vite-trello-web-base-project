@@ -9,3 +9,12 @@ export const mapOrder = (originalArray, orderArray, key) => {
     orderArray.indexOf(a[key]) - orderArray.indexOf(b[key])
   ))
 }
+
+export const generatePlaceHolderCard = (column) => {
+  return {
+    _id: `${column._id}-placeholder-card`,
+    boardId: column.boardId,
+    columnId: column._id,
+    FE_PlaceholderCard: true
+  }
+}
