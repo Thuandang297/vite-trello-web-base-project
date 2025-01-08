@@ -35,10 +35,7 @@ function Card(props) {
         cursor: 'pointer', maxWidth: 345,
         boxShadow: '0 3px 2px rgba(0,0,0,0.2)',
         overflow: 'unset',
-        visibility: card.FE_PlaceholderCard == true ? 'hidden' : '',
-        border: '1px solid transparent', '&:hover': {
-          borderColor: (theme) => theme.palette.primary.main
-        }
+        display: card.FE_PlaceholderCard ? 'none' : 'block'
       }}>
       {/* Box media */}
       {card?.cover && (<CardMedia

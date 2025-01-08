@@ -141,9 +141,8 @@ function BoardContent(props) {
     const { id: idOverItem } = over
     const activeColumn = findColumnByCardId(idActiveItem)
     const activeCardIndex = activeColumn?.cards?.findIndex(card => card._id == idActiveItem)
-
     //Check when overItem is column
-    if (idOverItem?.includes('column-id')) {
+    if (over.data.current?.cards !== undefined && over.data.current.cardOrderIds!==undefined ) {
       const overColumn = orderedColumns?.find(column => column._id == idOverItem)
       const newIndex = overColumn.cards.length
       updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
