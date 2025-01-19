@@ -20,7 +20,7 @@ import Columns from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import ListColumns from './ListColumns/ListColumns'
 function BoardContent(props) {
-  const { board, createNewColumnApi, createNewCardApi } = props
+  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn } = props
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -65,7 +65,7 @@ function BoardContent(props) {
     const { droppableContainers } = args
     //Check drag drop column
     if (activeItemType == TYPE.COLUMN) {
-      const columnArgs = { ...args, droppableContainers: droppableContainers.filter(c => c['id'].includes('column')) }
+      const columnArgs = { ...args, droppableContainers: droppableContainers.filter(c => c['data'].current.cards !== undefined) }
       return closestCorners(columnArgs)
     }
 
@@ -74,8 +74,9 @@ function BoardContent(props) {
     if (pointerIntersections.length === 0) return
     const intersections = pointerIntersections
     let overId = getFirstCollision(intersections, 'id')
+    let overData = getFirstCollision(intersections, 'data')
     if (overId != null) {
-      if (overId.includes('column')) {
+      if (overData?.droppableContainer?.data?.current?.cards !== undefined) {
         let columnIntersection = orderedColumns?.find(column => (column['_id'] == overId))
         //Check if column has cards then try to make droppableContainer for cards in this column
         if (columnIntersection?.cards?.length > 0) {
@@ -142,7 +143,7 @@ function BoardContent(props) {
     const activeColumn = findColumnByCardId(idActiveItem)
     const activeCardIndex = activeColumn?.cards?.findIndex(card => card._id == idActiveItem)
     //Check when overItem is column
-    if (over.data.current?.cards !== undefined && over.data.current.cardOrderIds!==undefined ) {
+    if (over.data.current?.cards !== undefined && over.data.current.cardOrderIds !== undefined) {
       const overColumn = orderedColumns?.find(column => column._id == idOverItem)
       const newIndex = overColumn.cards.length
       updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
@@ -182,6 +183,8 @@ function BoardContent(props) {
         // const dndOderedColumnIds = dndOderedColumns?.map(column => column._id)
         // Update the column again
         setOrderedColumns(dndOderedColumns)
+        //Call api to update orderedColumn
+        onUpdateOrderedColumn(dndOderedColumns.map(e => e._id))
       }
       else {
         //Check drag card

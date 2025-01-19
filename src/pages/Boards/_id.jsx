@@ -5,7 +5,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi } from '~/apis'
+import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi, fetchUpdateBoardApi } from '~/apis'
 import _ from 'lodash'
 import { toast } from 'react-toastify'
 import { generatePlaceHolderCard } from '~/utils/formatter'
@@ -72,13 +72,44 @@ function Board() {
     return createdCard
   }
 
+  const handlerUpdateOrderedColumn = (orderedColumnIds) => {
+    const updatedBoard = {
+      _id: board?.dataBoard._id,
+      title: board?.dataBoard.title,
+      description: board?.dataBoard.description,
+      type: board?.dataBoard.type,
+      columnOrderIds: [...orderedColumnIds]
+    }
+    fetchUpdateBoardApi(updatedBoard).then(() => {
+      return toast.success('Success', {
+        position: 'bottom-left',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light'
+      })
+    }).catch(error => {
+      return toast.error(error.message, {
+        position: 'bottom-left',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+  }
+
   return (
     <Container maxWidth='false' disableGutters sx={{ height: '100vh', backgroundColor: 'primary.main' }}>
       <AppBar />
       <BoardBar board={board?.dataBoard
       } />
       <BoardContent board={board?.dataBoard
-      } createNewBoardApi={createNewBoardApi} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} />
+      } createNewBoardApi={createNewBoardApi} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} onUpdateOrderedColumn={handlerUpdateOrderedColumn} />
     </Container>
   )
 }
