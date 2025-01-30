@@ -72,7 +72,7 @@ function Board() {
     return createdCard
   }
 
-  const handlerUpdateOrderedColumn = (orderedColumnIds) => {
+  const handlerUpdateOrderedColumn = async (orderedColumnIds) => {
     const updatedBoard = {
       _id: board?.dataBoard._id,
       title: board?.dataBoard.title,
@@ -80,7 +80,7 @@ function Board() {
       type: board?.dataBoard.type,
       columnOrderIds: [...orderedColumnIds]
     }
-    fetchUpdateBoardApi(updatedBoard).then(() => {
+    await fetchUpdateBoardApi(updatedBoard).then(() => {
       return toast.success('Success', {
         position: 'bottom-left',
         autoClose: 2000,

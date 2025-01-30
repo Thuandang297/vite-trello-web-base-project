@@ -207,6 +207,7 @@ function BoardContent(props) {
           if (column._id == columnId) return columnOfActiveCard
           return column
         })))
+        //Call api to update position of card in board
       }
     }
     setActiveItemData(null)
