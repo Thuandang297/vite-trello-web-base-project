@@ -11,8 +11,8 @@ export const fetchCreateNewBoardApi = async (reqBody) => {
   return response.data
 }
 
-export const fetchUpdateBoardApi = async (reqBody) => {
-  const response = await axios.put(`${API_ROOT}/v1/boards`, reqBody)
+export const fetchUpdateBoardApi = async (reqBody, boardId) => {
+  const response = await axios.put(`${API_ROOT}/v1/boards/${boardId}`, reqBody)
   return response.data
 }
 

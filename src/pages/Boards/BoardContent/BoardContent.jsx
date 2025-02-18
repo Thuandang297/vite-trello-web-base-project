@@ -208,6 +208,7 @@ function BoardContent(props) {
           return column
         })))
         //Call api to update position of card in board
+        
       }
     }
     setActiveItemData(null)

@@ -73,14 +73,14 @@ function Board() {
   }
 
   const handlerUpdateOrderedColumn = async (orderedColumnIds) => {
+    const boardId = board?.dataBoard._id;
     const updatedBoard = {
-      _id: board?.dataBoard._id,
       title: board?.dataBoard.title,
       description: board?.dataBoard.description,
       type: board?.dataBoard.type,
       columnOrderIds: [...orderedColumnIds]
     }
-    await fetchUpdateBoardApi(updatedBoard).then(() => {
+    await fetchUpdateBoardApi(updatedBoard, boardId).then(() => {
       return toast.success('Success', {
         position: 'bottom-left',
         autoClose: 2000,
