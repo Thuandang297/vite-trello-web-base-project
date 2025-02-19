@@ -20,7 +20,7 @@ import Columns from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import ListColumns from './ListColumns/ListColumns'
 function BoardContent(props) {
-  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn } = props
+  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn, onMoveCardInColumn } = props
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -208,7 +208,11 @@ function BoardContent(props) {
           return column
         })))
         //Call api to update position of card in board
-        
+        const data = {
+          columnId: columnId,
+          cardOrderIds: listCardOrderIds
+        }
+        onMoveCardInColumn(data)
       }
     }
     setActiveItemData(null)

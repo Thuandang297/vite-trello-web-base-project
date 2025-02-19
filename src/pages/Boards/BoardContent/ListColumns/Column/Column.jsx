@@ -207,7 +207,7 @@ const Column = (props) => {
               backgroundColor: '#bfc2cf'
             }
           }}>
-            <ListCards cards={column.cards} />
+            <ListCards column={column} cards={column.cards} />
           </Box>
           {/* Footer */}
           <Box sx={{

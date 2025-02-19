@@ -25,3 +25,8 @@ export const fetchCreateNewCardApi = async (reqBody) => {
   const response = await axios.post(`${API_ROOT}/v1/cards`, reqBody)
   return response.data
 }
+
+export const fetchUpdateColumnApi = async (reqBody, columnId) => {
+  const response = await axios.put(`${API_ROOT}/v1/columns/${columnId}`, reqBody)
+  return response.data
+}
