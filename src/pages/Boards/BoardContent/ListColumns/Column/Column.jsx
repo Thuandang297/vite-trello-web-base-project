@@ -31,8 +31,8 @@ const Column = (props) => {
   const dndKitColumnStyles = {
     transform: CSS.Translate.toString(transform),
     transition,
-    height:'100%',
-    opacity:isDragging ? 0.5:undefined
+    height: '100%',
+    opacity: isDragging ? 0.5 : undefined
   }
 
   const [openCreateCard, setOpenCreateCard] = useState(false)
@@ -216,12 +216,12 @@ const Column = (props) => {
           }}>
             {!openCreateCard ?
               <Box sx={{
-                display:'flex',
-                alignItems:'center',
-                justifyContent:'space-between',
-                height:'100%',
-                width:'100%',
-                gap:1
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                height: '100%',
+                width: '100%',
+                gap: 1
               }}>
                 <Button
                   startIcon={<AddCardIcon />}
@@ -238,7 +238,7 @@ const Column = (props) => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   height: '100%',
-                  width:'100%',
+                  width: '100%',
                   gap: 1
                 }}
               >
@@ -269,7 +269,6 @@ const Column = (props) => {
                     onChange={(e) => { setNewCardTitle(e.target.value) }}
                     autoFocus
                   />
-
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, margin: 1 }}>
                   <Button

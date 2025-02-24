@@ -5,7 +5,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi, fetchUpdateBoardApi, fetchUpdateColumnApi } from '~/apis'
+import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi, fetchUpdateBoardApi, fetchUpdateColumnApi, fetchMovingCardsApi } from '~/apis'
 import _ from 'lodash'
 import { toast } from 'react-toastify'
 import { generatePlaceHolderCard, mapOrder } from '~/utils/formatter'
@@ -17,7 +17,7 @@ function Board() {
       .then(response => {
         const { cards } = response.dataBoard
         response.dataBoard.columns.forEach(column => {
-          const cardsOfEachColumn = cards.filter(card => (card.columnId==column._id))
+          const cardsOfEachColumn = cards.filter(card => (card.columnId == column._id))
           const mapOrderedCards = mapOrder(cardsOfEachColumn, column.cardOrderIds, '_id')
           //Map the order by column.cardOrderIds
           column.cards = mapOrderedCards
@@ -108,10 +108,24 @@ function Board() {
   const handleMoveCardInColumn = async (data) => {
     const updatedColumn = {
       boardId: board?.dataBoard._id,
-      cardOrderIds: data.cardOrderIds
+      cardOrderIds: data.cardOrderIds,
+      cards: data?.cards
     }
     await fetchUpdateColumnApi(updatedColumn, data.columnId).then(() => {
       return toast.success('Move card in column success!', {
+        position: 'bottom-left',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+  }
+
+  const handleMoveCardOutColumn = async (data) => {
+    await fetchMovingCardsApi(data).then(() => {
+      return toast.success('Move card into a new column success!', {
         position: 'bottom-left',
         autoClose: 1000,
         hideProgressBar: true,
@@ -129,7 +143,7 @@ function Board() {
       } />
       <BoardContent board={board?.dataBoard
       } createNewBoardApi={createNewBoardApi} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} onUpdateOrderedColumn={handlerUpdateOrderedColumn}
-      onMoveCardInColumn={handleMoveCardInColumn} />
+      onMoveCardInColumn={handleMoveCardInColumn} onMoveCardOutColumn={handleMoveCardOutColumn} />
     </Container>
   )
 }
