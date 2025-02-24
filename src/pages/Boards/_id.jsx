@@ -5,23 +5,25 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '../../apis/mock-data'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi, fetchUpdateBoardApi } from '~/apis'
+import { fetchBoardDetailsApi, fetchCreateNewBoardApi, fetchCreateNewColumnApi, fetchCreateNewCardApi, fetchUpdateBoardApi, fetchUpdateColumnApi, fetchMovingCardsApi } from '~/apis'
 import _ from 'lodash'
 import { toast } from 'react-toastify'
-import { generatePlaceHolderCard } from '~/utils/formatter'
+import { generatePlaceHolderCard, mapOrder } from '~/utils/formatter'
 function Board() {
   const [board, setBoard] = useState()
   useEffect(() => {
     const boardId = '67791259500f2e2c2b7e0ac4'
     fetchBoardDetailsApi(boardId)
       .then(response => {
-        //Map them placeHolderCard cho nhung column khong chua card trong board
+        const { cards } = response.dataBoard
         response.dataBoard.columns.forEach(column => {
-          if (_.isEmpty(column.cards)) {
-            column.cards = [generatePlaceHolderCard(column)]
-            column.cardOrderIds = [generatePlaceHolderCard(column)._id]
-          }
+          const cardsOfEachColumn = cards.filter(card => (card.columnId == column._id))
+          const mapOrderedCards = mapOrder(cardsOfEachColumn, column.cardOrderIds, '_id')
+          //Map the order by column.cardOrderIds
+          column.cards = mapOrderedCards
+          return column
         })
+        delete response.dataBoard.cards
         setBoard(response)
       })
       .catch((error) => {
@@ -73,14 +75,14 @@ function Board() {
   }
 
   const handlerUpdateOrderedColumn = async (orderedColumnIds) => {
+    const boardId = board?.dataBoard._id
     const updatedBoard = {
-      _id: board?.dataBoard._id,
       title: board?.dataBoard.title,
       description: board?.dataBoard.description,
       type: board?.dataBoard.type,
       columnOrderIds: [...orderedColumnIds]
     }
-    await fetchUpdateBoardApi(updatedBoard).then(() => {
+    await fetchUpdateBoardApi(updatedBoard, boardId).then(() => {
       return toast.success('Success', {
         position: 'bottom-left',
         autoClose: 2000,
@@ -103,13 +105,45 @@ function Board() {
     })
   }
 
+  const handleMoveCardInColumn = async (data) => {
+    const updatedColumn = {
+      boardId: board?.dataBoard._id,
+      cardOrderIds: data.cardOrderIds,
+      cards: data?.cards
+    }
+    await fetchUpdateColumnApi(updatedColumn, data.columnId).then(() => {
+      return toast.success('Move card in column success!', {
+        position: 'bottom-left',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+  }
+
+  const handleMoveCardOutColumn = async (data) => {
+    await fetchMovingCardsApi(data).then(() => {
+      return toast.success('Move card into a new column success!', {
+        position: 'bottom-left',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+  }
+
   return (
     <Container maxWidth='false' disableGutters sx={{ height: '100vh', backgroundColor: 'primary.main' }}>
       <AppBar />
       <BoardBar board={board?.dataBoard
       } />
       <BoardContent board={board?.dataBoard
-      } createNewBoardApi={createNewBoardApi} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} onUpdateOrderedColumn={handlerUpdateOrderedColumn} />
+      } createNewBoardApi={createNewBoardApi} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} onUpdateOrderedColumn={handlerUpdateOrderedColumn}
+      onMoveCardInColumn={handleMoveCardInColumn} onMoveCardOutColumn={handleMoveCardOutColumn} />
     </Container>
   )
 }

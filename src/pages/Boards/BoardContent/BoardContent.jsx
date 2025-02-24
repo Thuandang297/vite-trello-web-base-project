@@ -4,7 +4,6 @@ import {
   DndContext,
   DragOverlay,
   getFirstCollision,
-  KeyboardSensor,
   MeasuringStrategy,
   PointerSensor,
   pointerWithin,
@@ -20,7 +19,7 @@ import Columns from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import ListColumns from './ListColumns/ListColumns'
 function BoardContent(props) {
-  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn } = props
+  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn, onMoveCardInColumn, onMoveCardOutColumn } = props
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -32,11 +31,6 @@ function BoardContent(props) {
       tolerance: 10
     }
   })
-  const keyboardSensor = useSensor(KeyboardSensor, {
-    activationConstraint: {
-      distance: 10
-    }
-  })
   const poiterSensor = useSensor(PointerSensor, {
     activationConstraint: {
       distance: 10
@@ -45,7 +39,7 @@ function BoardContent(props) {
   const sensors = useSensors(
     mouseSensor,
     touchSensor,
-    keyboardSensor,
+    // keyboardSensor,
     poiterSensor
   )
   const TYPE = {
@@ -54,7 +48,6 @@ function BoardContent(props) {
   }
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeItemType, setActiveItemType] = useState()
-  const [, setActiveItemId] = useState()
   const [activeItemData, setActiveItemData] = useState()
   const lastOverId = useRef()
   const customDropAnimation = {
@@ -130,7 +123,6 @@ function BoardContent(props) {
     const { active } = event
     const checkType = active?.data?.current?.columnId ? TYPE.CARD : TYPE.COLUMN
     setActiveItemType(checkType)
-    setActiveItemId(active?.id)
     setActiveItemData(active?.data?.current)
   }
 
@@ -150,7 +142,6 @@ function BoardContent(props) {
     }
 
     //Check when overItem is card
-
     const overColumn = findColumnByCardId(idOverItem)
     if (!activeColumn || !overColumn) return
     //If drop and drag in one column then use onDragEnd to update data after dragging
@@ -208,10 +199,31 @@ function BoardContent(props) {
           return column
         })))
         //Call api to update position of card in board
+        const data = {
+          columnId: columnId,
+          cardOrderIds: listCardOrderIds
+        }
+        onMoveCardInColumn(data)
       }
     }
+    else {
+      const dropColumnId = active?.data?.current?.columnId
+      const dragColumnId = activeItemData.columnId
+      if (dragColumnId === dropColumnId) return
+
+      const dropColumnData = orderedColumns.find(e => e._id === dropColumnId)
+      const dragColumnData = orderedColumns.find(e => e._id === dragColumnId)
+
+      const requestData = {
+        cardId: active?.data?.current?._id,
+        dropColumnId: dropColumnId,
+        dragColumnId: dragColumnId,
+        dragListCardIds: dragColumnData.cardOrderIds,
+        dropListCardIds: dropColumnData.cardOrderIds
+      }
+      onMoveCardOutColumn(requestData)
+    }
     setActiveItemData(null)
-    setActiveItemId(null)
     setActiveItemType(null)
   }
 
