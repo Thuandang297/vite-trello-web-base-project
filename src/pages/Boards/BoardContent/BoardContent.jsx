@@ -48,7 +48,6 @@ function BoardContent(props) {
   }
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeItemType, setActiveItemType] = useState()
-  const [, setActiveItemId] = useState()
   const [activeItemData, setActiveItemData] = useState()
   const lastOverId = useRef()
   const customDropAnimation = {
@@ -124,7 +123,6 @@ function BoardContent(props) {
     const { active } = event
     const checkType = active?.data?.current?.columnId ? TYPE.CARD : TYPE.COLUMN
     setActiveItemType(checkType)
-    setActiveItemId(active?.id)
     setActiveItemData(active?.data?.current)
   }
 
@@ -210,22 +208,22 @@ function BoardContent(props) {
     }
     else {
       const dropColumnId = active?.data?.current?.columnId
-      const dragColumnId = over?.data?.current?.columnId
+      const dragColumnId = activeItemData.columnId
+      if (dragColumnId === dropColumnId) return
 
       const dropColumnData = orderedColumns.find(e => e._id === dropColumnId)
       const dragColumnData = orderedColumns.find(e => e._id === dragColumnId)
 
       const requestData = {
         cardId: active?.data?.current?._id,
-        dropColumnId: over?.data?.current?.columnId,
-        dragColumnId: active?.data?.current?.columnId,
+        dropColumnId: dropColumnId,
+        dragColumnId: dragColumnId,
         dragListCardIds: dragColumnData.cardOrderIds,
         dropListCardIds: dropColumnData.cardOrderIds
       }
       onMoveCardOutColumn(requestData)
     }
     setActiveItemData(null)
-    setActiveItemId(null)
     setActiveItemType(null)
   }
 

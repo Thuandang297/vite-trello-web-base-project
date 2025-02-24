@@ -32,6 +32,6 @@ export const fetchUpdateColumnApi = async (reqBody, columnId) => {
 }
 
 export const fetchMovingCardsApi = async (reqBody) => {
-  const response = await axios.put(`${API_ROOT}/v1/moving-cards`, reqBody)
+  const response = await axios.put(`${API_ROOT}/v1/moving-card`, reqBody)
   return response.data
 }
