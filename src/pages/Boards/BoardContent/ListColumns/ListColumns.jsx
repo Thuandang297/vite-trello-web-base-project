@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import Column from './Column/Column'
-function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
+function ListColumns({ columns, createNewColumnApi, createNewCardApi, onGetDetailBoard }) {
   const [openCreateColumn, setOpenCreateColumn] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const toogleOpenCreateColumn = () => setOpenCreateColumn(!openCreateColumn)
@@ -66,7 +66,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi }) {
         overflowY: 'hidden'
       }} >
         {columns?.map(column => (
-          < Column key={column?._id} column={column} createNewCardApi={createNewCardApi} />
+          < Column key={column?._id} column={column} createNewCardApi={createNewCardApi} onGetDetailBoard={onGetDetailBoard}/>
         ))}
         {openCreateColumn ?
           <Box sx={{

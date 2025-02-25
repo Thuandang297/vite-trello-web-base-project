@@ -31,6 +31,11 @@ export const fetchUpdateColumnApi = async (reqBody, columnId) => {
   return response.data
 }
 
+export const fetchDeleteColumnApi = async (columnId) => {
+  const response = await axios.delete(`${API_ROOT}/v1/columns/${columnId}`)
+  return response.data
+}
+
 export const fetchMovingCardsApi = async (reqBody) => {
   const response = await axios.put(`${API_ROOT}/v1/moving-card`, reqBody)
   return response.data

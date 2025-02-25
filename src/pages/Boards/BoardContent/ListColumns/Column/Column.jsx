@@ -21,8 +21,10 @@ import TextField from '@mui/material/TextField'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import ListCards from './ListCards/ListCards'
+import ConfirmDeleteDialog from '~/components/ConfirmDeleteDialog'
+import { fetchDeleteColumnApi } from '~/apis'
 const Column = (props) => {
-  const { column, createNewCardApi } = props
+  const { column, createNewCardApi, onGetDetailBoard } = props
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
@@ -82,12 +84,45 @@ const Column = (props) => {
     setNewCardTitle('')
   }
   const [anchorEl, setAnchorEl] = useState(null)
+  const [openDeleteConfirmDialog, setOpenDeleteConfirmDialog] = useState(false)
+
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleOpenConfirmDeleteDialog = () => {
+    setOpenDeleteConfirmDialog(true)
+    setAnchorEl(null)
+  }
+
+  const handleDeleteColumn = async () => {
+    await fetchDeleteColumnApi(column._id).then(() => {
+      return toast.success('Delete column success!', {
+        position: 'bottom-left',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        theme: 'light'
+      })
+    }).catch(() => {
+      return toast.error('Delete column fail!', {
+        position: 'bottom-left',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+
+    setOpenDeleteConfirmDialog(false)
+    setAnchorEl(null)
+    onGetDetailBoard()
   }
   // const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
@@ -168,7 +203,7 @@ const Column = (props) => {
                   <ListItemText>Paste</ListItemText>
                 </MenuItem>
                 <Divider />
-                <MenuItem>
+                <MenuItem onClick={handleOpenConfirmDeleteDialog}>
                   <ListItemIcon>
                     <DeleteForeverIcon fontSize="small" />
                   </ListItemIcon>
@@ -305,6 +340,16 @@ const Column = (props) => {
             }
           </Box>
         </Box>
+        {openDeleteConfirmDialog &&
+          <ConfirmDeleteDialog
+            title={'Confirm delete column?'}
+            open={openDeleteConfirmDialog}
+            onConfirm={handleDeleteColumn}
+            onClose={() => setOpenDeleteConfirmDialog(false)}
+            description={`Delete column ${column.title}?`}
+          />
+        }
+
       </div>
     </>
   )
