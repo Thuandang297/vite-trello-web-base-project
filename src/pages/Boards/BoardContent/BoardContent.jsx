@@ -19,7 +19,7 @@ import Columns from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import ListColumns from './ListColumns/ListColumns'
 function BoardContent(props) {
-  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn, onMoveCardInColumn, onMoveCardOutColumn } = props
+  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn, onMoveCardInColumn, onMoveCardOutColumn, onGetDetailBoard } = props
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -247,7 +247,7 @@ function BoardContent(props) {
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}
       >
-        <ListColumns columns={orderedColumns} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} />
+        <ListColumns columns={orderedColumns} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} onGetDetailBoard={onGetDetailBoard}/>
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeItemType && null}
           {activeItemType && activeItemType === TYPE.COLUMN && <Columns column={activeItemData} />}

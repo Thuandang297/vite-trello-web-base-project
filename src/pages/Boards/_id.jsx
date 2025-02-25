@@ -39,6 +39,23 @@ function Board() {
       })
   }, [])
 
+  const getDetailBoard = () => {
+    const boardId = '67791259500f2e2c2b7e0ac4'
+    fetchBoardDetailsApi(boardId)
+      .then(response => {
+        const { cards } = response.dataBoard
+        response.dataBoard.columns.forEach(column => {
+          const cardsOfEachColumn = cards.filter(card => (card.columnId == column._id))
+          const mapOrderedCards = mapOrder(cardsOfEachColumn, column.cardOrderIds, '_id')
+          //Map the order by column.cardOrderIds
+          column.cards = mapOrderedCards
+          return column
+        })
+        delete response.dataBoard.cards
+        setBoard(response)
+      })
+  }
+
   const createNewBoardApi = async (newBoard) => {
     const createdBoard = await fetchCreateNewBoardApi(newBoard)
     return createdBoard
@@ -143,7 +160,7 @@ function Board() {
       } />
       <BoardContent board={board?.dataBoard
       } createNewBoardApi={createNewBoardApi} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} onUpdateOrderedColumn={handlerUpdateOrderedColumn}
-      onMoveCardInColumn={handleMoveCardInColumn} onMoveCardOutColumn={handleMoveCardOutColumn} />
+      onMoveCardInColumn={handleMoveCardInColumn} onMoveCardOutColumn={handleMoveCardOutColumn} onGetDetailBoard={getDetailBoard}/>
     </Container>
   )
 }
