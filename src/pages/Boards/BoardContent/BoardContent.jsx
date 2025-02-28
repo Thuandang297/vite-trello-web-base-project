@@ -49,6 +49,7 @@ function BoardContent(props) {
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeItemType, setActiveItemType] = useState()
   const [activeItemData, setActiveItemData] = useState()
+  const [overItemData, setOverItemData] = useState(null)
   const lastOverId = useRef()
   const customDropAnimation = {
 
@@ -137,13 +138,15 @@ function BoardContent(props) {
     //Check when overItem is column
     if (over.data.current?.cards !== undefined && over.data.current.cardOrderIds !== undefined) {
       const overColumn = orderedColumns?.find(column => column._id == idOverItem)
+      setOverItemData(overColumn)
       const newIndex = overColumn.cards.length
-      updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
+      return updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
     }
 
     //Check when overItem is card
     const overColumn = findColumnByCardId(idOverItem)
     if (!activeColumn || !overColumn) return
+    setOverItemData(overColumn)
     //If drop and drag in one column then use onDragEnd to update data after dragging
     if (activeColumn._id == overColumn._id) return
     const overCardIndex = overColumn?.cards?.findIndex(card => card._id == idOverItem)
@@ -159,69 +162,81 @@ function BoardContent(props) {
     updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
   }
 
+  const handleMoveCardInColumn = (active, over) => {
+    //Check drag card
+    const dragedData = active?.id
+    const overData = over?.id
+    //1.Get id of column active now
+    const columnId = active?.data?.current?.columnId
+
+    //2.Get cards of column
+    let columnOfActiveCard = orderedColumns?.find((column) => (column._id == columnId))
+
+    //3 Get old index and new index of array
+    const oldIndex = columnOfActiveCard.cardOrderIds?.findIndex(cardId => cardId == dragedData)
+    const newIndex = columnOfActiveCard.cardOrderIds?.findIndex(cardId => cardId == overData)
+    if (oldIndex === newIndex) return
+    //3.Take arrayMove for list card to change index of card to target index
+    const listCardOrderIds = arrayMove(columnOfActiveCard.cardOrderIds, oldIndex, newIndex)
+    columnOfActiveCard.cardOrderIds = listCardOrderIds
+    columnOfActiveCard.cards = mapOrder(columnOfActiveCard?.cards, listCardOrderIds, '_id')
+    //4.Set list column again
+    setOrderedColumns(curr => (curr?.map(column => {
+      if (column._id == columnId) return columnOfActiveCard
+      return column
+    })))
+    //Call api to update position of card in board
+    const data = {
+      columnId: columnId,
+      cardOrderIds: listCardOrderIds
+    }
+    onMoveCardInColumn(data)
+  }
+
+  const handleMoveCardOutColumn = (active) => {
+    //Check drag card out column
+    const dropColumnId = active?.data?.current?.columnId
+    const dragColumnId = activeItemData.columnId
+    if (dragColumnId === dropColumnId) return
+
+    const dropColumnData = orderedColumns.find(e => e._id === dropColumnId)
+    const dragColumnData = orderedColumns.find(e => e._id === dragColumnId)
+
+    const requestData = {
+      cardId: active?.data?.current?._id,
+      dropColumnId: dropColumnId,
+      dragColumnId: dragColumnId,
+      dragListCardIds: dragColumnData.cardOrderIds,
+      dropListCardIds: dropColumnData.cardOrderIds
+    }
+    onMoveCardOutColumn(requestData)
+  }
+
   const handleDragEnd = (event) => {
     const { active, over } = event
     if (!over) return
     const dragedData = active?.id
     const overData = over?.id
-    if (dragedData != overData) {
-      //Check drag column
-      if (activeItemType == TYPE.COLUMN) {
-        const oldIndex = orderedColumns?.findIndex(column => column._id == dragedData)
-        const newIndex = orderedColumns?.findIndex(column => column._id == overData)
-        const dndOderedColumns = arrayMove(orderedColumns, oldIndex, newIndex)
-        //Get list ids has ordered of column
-        // const dndOderedColumnIds = dndOderedColumns?.map(column => column._id)
-        // Update the column again
-        setOrderedColumns(dndOderedColumns)
-        //Call api to update orderedColumn
-        onUpdateOrderedColumn(dndOderedColumns.map(e => e._id))
-      }
-      else {
-        //Check drag card
-        //1.Get id of column active now
-        const columnId = active?.data?.current?.columnId
 
-        //2.Get cards of column
-        let columnOfActiveCard = orderedColumns?.find((column) => (column._id == columnId))
-
-        //3 Get old index and new index of array
-        const oldIndex = columnOfActiveCard.cardOrderIds?.findIndex(cardId => cardId == dragedData)
-        const newIndex = columnOfActiveCard.cardOrderIds?.findIndex(cardId => cardId == overData)
-
-        //3.Take arrayMove for list card to change index of card to target index
-        const listCardOrderIds = arrayMove(columnOfActiveCard.cardOrderIds, oldIndex, newIndex)
-        columnOfActiveCard.cardOrderIds = listCardOrderIds
-        columnOfActiveCard.cards = mapOrder(columnOfActiveCard?.cards, listCardOrderIds, '_id')
-        //4.Set list column again
-        setOrderedColumns(curr => (curr?.map(column => {
-          if (column._id == columnId) return columnOfActiveCard
-          return column
-        })))
-        //Call api to update position of card in board
-        const data = {
-          columnId: columnId,
-          cardOrderIds: listCardOrderIds
-        }
-        onMoveCardInColumn(data)
-      }
+    if (activeItemType == TYPE.COLUMN) {
+      const oldIndex = orderedColumns?.findIndex(column => column._id == dragedData)
+      const newIndex = orderedColumns?.findIndex(column => column._id == overData)
+      const dndOderedColumns = arrayMove(orderedColumns, oldIndex, newIndex)
+      //Get list ids has ordered of column
+      // const dndOderedColumnIds = dndOderedColumns?.map(column => column._id)
+      // Update the column again
+      setOrderedColumns(dndOderedColumns)
+      //Call api to update orderedColumn
+      onUpdateOrderedColumn(dndOderedColumns.map(e => e._id))
     }
-    else {
-      const dropColumnId = active?.data?.current?.columnId
-      const dragColumnId = activeItemData.columnId
-      if (dragColumnId === dropColumnId) return
-
-      const dropColumnData = orderedColumns.find(e => e._id === dropColumnId)
-      const dragColumnData = orderedColumns.find(e => e._id === dragColumnId)
-
-      const requestData = {
-        cardId: active?.data?.current?._id,
-        dropColumnId: dropColumnId,
-        dragColumnId: dragColumnId,
-        dragListCardIds: dragColumnData.cardOrderIds,
-        dropListCardIds: dropColumnData.cardOrderIds
+    else if (activeItemType == TYPE.CARD) {
+      //When drag card in one column
+      const checkDragInColumn = activeItemData.columnId === overItemData._id
+      if (checkDragInColumn) {
+        handleMoveCardInColumn(active, over)
+      } else {
+        handleMoveCardOutColumn(active, over)
       }
-      onMoveCardOutColumn(requestData)
     }
     setActiveItemData(null)
     setActiveItemType(null)
