@@ -5,7 +5,7 @@
   "type": "module",
   "author": "Thuan dang",
   "engines": {
-    "node": "20.12.2"
+    "node": "20.x"
   },
   "scripts": {
     "dev": "vite --host",
