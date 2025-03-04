@@ -3,13 +3,16 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import ReactDOM from 'react-dom/client'
 import App from '~/App'
 import theme from '~/theme'
-
+import store from './redux/store'
+import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <CssVarsProvider theme={theme}>
-    <CssBaseline />
-    <App />
-    <ToastContainer />
-  </CssVarsProvider>
+  <Provider store={store}>
+    <CssVarsProvider theme={theme}>
+      <CssBaseline />
+      <App />
+      <ToastContainer />
+    </CssVarsProvider>
+  </Provider>
 )
