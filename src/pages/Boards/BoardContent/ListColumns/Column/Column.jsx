@@ -22,9 +22,12 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import ListCards from './ListCards/ListCards'
 import ConfirmDeleteDialog from '~/components/ConfirmDeleteDialog'
-import { fetchDeleteColumnApi } from '~/apis'
+import { fetchCreateNewCardApi, fetchDeleteColumnApi } from '~/apis'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchBoardDetailsApi, selectCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { cloneDeep } from 'lodash'
 const Column = (props) => {
-  const { column, createNewCardApi, onGetDetailBoard } = props
+  const { column } = props
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
@@ -36,9 +39,12 @@ const Column = (props) => {
     height: '100%',
     opacity: isDragging ? 0.5 : undefined
   }
+  //Global state redux
+  const board = useSelector(selectCurrentActiveBoard)
 
   const [openCreateCard, setOpenCreateCard] = useState(false)
   const [newCardTitle, setNewCardTitle] = useState('')
+  const dispatch = useDispatch()
   const toogleOpenCreateCard = () => setOpenCreateCard(!openCreateCard)
 
   const addNewCard = async () => {
@@ -53,15 +59,32 @@ const Column = (props) => {
         theme: 'light'
       })
     }
-    const newCardData = {
+    const newCard = {
       title: newCardTitle,
       columnId: column?._id
     }
-    await createNewCardApi(newCardData).then((response) => {
-      if (!response) return
-      toast.success('Creat column success!', {
+    const newReqBody = {
+      ...newCard,
+      boardId: board._id
+    }
+    //Gọi api tao card mới
+    await fetchCreateNewCardApi(newReqBody).then(response => {
+      const { createdCard } = response
+      //Update new card to column
+      const newBoard = cloneDeep(board)
+      const newColumn = newBoard.columns.find(column => column._id === newCard.columnId)
+      newColumn.cards.push(createdCard)
+      newColumn.cardOrderIds.push(createdCard._id)
+      dispatch(updateCurrentActiveBoard(newBoard))
+
+      //Reset input
+      setNewCardTitle('')
+      setOpenCreateCard(false)
+
+      //Show toast success
+      return toast.success('Create card success!', {
         position: 'bottom-left',
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -69,19 +92,6 @@ const Column = (props) => {
         theme: 'light'
       })
     })
-      .catch(() => {
-        toast.error('Fail to create a column!', {
-          position: 'bottom-left',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: 'light'
-        })
-      })
-    toogleOpenCreateCard()
-    setNewCardTitle('')
   }
   const [anchorEl, setAnchorEl] = useState(null)
   const [openDeleteConfirmDialog, setOpenDeleteConfirmDialog] = useState(false)
@@ -122,9 +132,9 @@ const Column = (props) => {
 
     setOpenDeleteConfirmDialog(false)
     setAnchorEl(null)
-    onGetDetailBoard()
+    const boardId = '67791259500f2e2c2b7e0ac4'
+    dispatch(fetchBoardDetailsApi(boardId))
   }
-  // const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
     <>
       {/* Column*/}
