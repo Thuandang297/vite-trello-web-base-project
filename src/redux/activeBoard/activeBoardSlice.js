@@ -9,6 +9,7 @@ const initialState = {
 //Reducer là nơi xử lý các action được gửi từ các component và thay đổi dữ liệu trong store
 //Sử dụng extraReducers để xử lý các action được tạo ra từ createAsyncThunk
 //Sử dụng createAsyncThunk để tạo ra các action gửi request lên server
+//Đây được coi là mid
 export const fetchBoardDetailsApi = createAsyncThunk(
   'activeBoard/fetchBoardDetailsApi',
   async (boardId) => {
@@ -30,18 +31,17 @@ export const activeBoardSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchBoardDetailsApi.fulfilled, (state, action) => {
       //action.payload chính là dữ liệu trả về từ server response.data trả về từ api fetchBoardDetailsApi
-      let response = action.payload
-      const { cards } = response.dataBoard
-      response.dataBoard.columns.forEach(column => {
+      let response = action.payload?.dataBoard
+      const { cards } = response
+      response.columns.forEach(column => {
         const cardsOfEachColumn = cards.filter(card => (card.columnId == column._id))
         const mapOrderedCards = mapOrder(cardsOfEachColumn, column.cardOrderIds, '_id')
         //Map the order by column.cardOrderIds
         column.cards = mapOrderedCards
         return column
       })
-      delete response.dataBoard.cards
+      delete response.cards
       state.currentActiveBoard = response
-      state.entities.push(response)
     })
   }
 })
