@@ -137,6 +137,7 @@ function ListColumns({ columns }) {
                       bgcolor: (theme) => theme.palette.success.main
                     }
                   }}
+                  className={'interceptor-loading'}
                   onClick={addNewColumn}
                 >
                   Add column
