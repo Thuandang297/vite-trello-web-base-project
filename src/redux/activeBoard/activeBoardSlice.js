@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+// import axios from 'axios'
+import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 import { mapOrder } from '~/utils/formatter'
 const initialState = {
@@ -13,7 +14,7 @@ const initialState = {
 export const fetchBoardDetailsApi = createAsyncThunk(
   'activeBoard/fetchBoardDetailsApi',
   async (boardId) => {
-    const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`)
+    const response = await authorizeAxiosInstance.get(`${API_ROOT}/v1/boards/${boardId}`)
     return response.data
   }
 )

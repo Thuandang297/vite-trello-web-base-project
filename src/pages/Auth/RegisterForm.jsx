@@ -105,6 +105,7 @@ function RegisterForm() {
               size="large"
               fullWidth
               disabled={Object.keys(errors).length > 0}
+              className={'interceptor-loading'}
             >
               Register
             </Button>

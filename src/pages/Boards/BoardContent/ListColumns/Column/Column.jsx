@@ -49,7 +49,7 @@ const Column = (props) => {
 
   const addNewCard = async () => {
     if (!newCardTitle) {
-      return toast.error('Emty card title!', {
+      return toast.error('Empty card title!', {
         position: 'bottom-left',
         autoClose: 3000,
         hideProgressBar: false,
@@ -330,6 +330,7 @@ const Column = (props) => {
                         bgcolor: (theme) => theme.palette.success.main
                       }
                     }}
+                    className={'interceptor-loading'}
                     onClick={addNewCard}
                   >
                     Add
