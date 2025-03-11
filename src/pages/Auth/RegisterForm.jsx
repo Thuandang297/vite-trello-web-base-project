@@ -1,22 +1,35 @@
 // TrungQuanDev: https://youtube.com/@trungquandev
-import { Link } from 'react-router-dom'
+import LockIcon from '@mui/icons-material/Lock'
+import { Card as MuiCard } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
-import LockIcon from '@mui/icons-material/Lock'
-import Typography from '@mui/material/Typography'
-import { Card as MuiCard } from '@mui/material'
-import { ReactComponent as TrelloIcon } from '~/assets/icon-trello.svg'
 import CardActions from '@mui/material/CardActions'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
 import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { fetchRegisterUserApi } from '~/apis'
+import { ReactComponent as TrelloIcon } from '~/assets/icon-trello.svg'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import { FIELD_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE, PASSWORD_CONFIRMATION_MESSAGE } from '~/utils/validators'
+import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_CONFIRMATION_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 function RegisterForm() {
   const { register, handleSubmit, formState, watch } = useForm()
   const { errors } = formState
-  const submitRegister = () => {
+  const navigate = useNavigate()
+  const submitRegister = (data) => {
+    //Call api register user
+    const { email, password } = data
+    toast.promise(fetchRegisterUserApi({ email, password }), {
+      pending: 'Registering...',
+      success: 'Register successfully! Please verify your email to login',
+      error: 'Register failed! Please try again'
+    }).then(() => {
+      //Redirect to login page
+      navigate(`/login?registeredEmail=${email}`)
+    })
   }
   return (
     <form onSubmit={handleSubmit(submitRegister)}>
