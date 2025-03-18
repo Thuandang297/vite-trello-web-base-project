@@ -2,13 +2,13 @@
 import Container from '@mui/material/Container'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import AppBar from '~/components/AppBar/AppBar'
 import {
   fetchBoardDetailsApi
 } from '~/redux/activeBoard/activeBoardSlice'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-import { useParams } from 'react-router-dom'
 function Board() {
   const dispatch = useDispatch()
   const { boardId } = useParams()

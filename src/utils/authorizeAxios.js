@@ -25,11 +25,18 @@ authorizeAxiosInstance.interceptors.response.use((response) => {
 }, (error) => {
   interceptorLoadingElements(false)
   let errorMessage = error.message
-  if (error.response.data?.message) {
+  if (error?.response?.data?.message) {
     errorMessage = error.response.data.message
   }
   if (error.response.status !== 410) {
-    toast.error(errorMessage)
+    toast.error(errorMessage, {
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: 'light'
+    })
   }
   return Promise.reject(error)
 })
