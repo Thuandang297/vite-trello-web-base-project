@@ -33,7 +33,6 @@ export const activeBoardSlice = createSlice({
     builder.addCase(fetchBoardDetailsApi.fulfilled, (state, action) => {
       //action.payload chính là dữ liệu trả về từ server response.data trả về từ api fetchBoardDetailsApi
       let response = action.payload.dataBoard
-      console.log('🚀 ~ builder.addCase ~ response:', response)
       const { cards } = response
       response.columns.forEach(column => {
         const cardsOfEachColumn = cards.filter(card => (card.columnId == column._id))

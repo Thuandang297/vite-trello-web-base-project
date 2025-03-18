@@ -4,29 +4,29 @@ import { API_ROOT } from '~/utils/constants'
 const initialState = {
   activeUser: null
 }
-export const fetchUserDetailsApi = createAsyncThunk(
-  'currentUser/fetchUserDetailsApi',
-  async (userId) => {
-    const response = await authorizeAxiosInstance.get(`${API_ROOT}/v1/users/${userId}`)
+export const fetchLoginUserApi = createAsyncThunk(
+  'user/fetchLoginUserApi',
+  async (reqBody) => {
+    const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/login`, reqBody)
     return response.data
   }
 )
 
 export const userSlice = createSlice({
-  name: 'currentUser',
+  name: 'user',
   initialState,
   reducers: {
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUserDetailsApi.fulfilled, (state, action) => {
-      let response = action.payload?.dataUser
+    builder.addCase(fetchLoginUserApi.fulfilled, (state, action) => {
+      let response = action.payload
       state.activeUser = response
     })
   }
 })
 
-export const selectCurrentActiveUser = (state) => {
-  return state.activeUser.activeUser
+export const selectCurrentUser = (state) => {
+  return state.userReducer.activeUser
 }
 
 export const userReducer = userSlice.reducer

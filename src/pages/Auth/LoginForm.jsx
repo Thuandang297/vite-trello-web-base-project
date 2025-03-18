@@ -1,20 +1,22 @@
 // TrungQuanDev: https://youtube.com/@trungquandev
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import LockIcon from '@mui/icons-material/Lock'
+import { Alert, Card as MuiCard } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
-import LockIcon from '@mui/icons-material/Lock'
-import Typography from '@mui/material/Typography'
-import { Alert, Card as MuiCard } from '@mui/material'
-import { ReactComponent as TrelloIcon } from '~/assets/icon-trello.svg'
 import CardActions from '@mui/material/CardActions'
 import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { ReactComponent as TrelloIcon } from '~/assets/icon-trello.svg'
 // import Alert from '@mui/material/Alert'
 import { useForm } from 'react-hook-form'
-import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import { FIELD_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
+import { fetchLoginUserApi } from '~/redux/users/userSlice'
+import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 function LoginForm() {
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
@@ -24,16 +26,14 @@ function LoginForm() {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const submitLogIn = () => {
-   const { email, password } = data
-    toast.promise(fetchRegisterUserApi({ email, password }), {
-      pending: 'Registering...',
-      success: 'Register successfully! Please verify your email to login',
-      error: 'Register failed! Please try again'
-    }).then(() => {
-      //Redirect to login page
-      navigate(`/login?registeredEmail=${email}`)
-    })
+  const submitLogIn = (data) => {
+    const { email, password } = data
+    toast.promise(dispatch(fetchLoginUserApi({ email, password }))
+      .then((res) => {if (!res.error) navigate('/')}),
+    { pending: 'Loging...',
+      success: 'Login successfully'
+    }
+    )
   }
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>
@@ -61,11 +61,11 @@ function LoginForm() {
             }
             {
               registeredEmail &&
-                <Alert severity="info" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
-                  An email has been sent to <b>{registeredEmail}</b> for verification
-                  <Typography variant="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}></Typography>
-                  <br />Please check and verify your account before logging in!
-                </Alert>
+              <Alert severity="info" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>
+                An email has been sent to <b>{registeredEmail}</b> for verification
+                <Typography variant="span" sx={{ fontWeight: 'bold', '&:hover': { color: '#fdba26' } }}></Typography>
+                <br />Please check and verify your account before logging in!
+              </Alert>
             }
           </Box>
           <Box sx={{ padding: '0 1em 1em 1em' }}>
