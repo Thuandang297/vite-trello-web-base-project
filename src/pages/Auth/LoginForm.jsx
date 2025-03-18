@@ -1,5 +1,5 @@
 // TrungQuanDev: https://youtube.com/@trungquandev
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
@@ -14,6 +14,7 @@ import Zoom from '@mui/material/Zoom'
 import { useForm } from 'react-hook-form'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { FIELD_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
+import { useDispatch } from 'react-redux'
 function LoginForm() {
   const { register, handleSubmit, formState } = useForm()
   const { errors } = formState
@@ -21,7 +22,18 @@ function LoginForm() {
   const verifiedEmail = searchParams.get('verifiedEmail')
   const registeredEmail = searchParams.get('registeredEmail')
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const submitLogIn = () => {
+   const { email, password } = data
+    toast.promise(fetchRegisterUserApi({ email, password }), {
+      pending: 'Registering...',
+      success: 'Register successfully! Please verify your email to login',
+      error: 'Register failed! Please try again'
+    }).then(() => {
+      //Redirect to login page
+      navigate(`/login?registeredEmail=${email}`)
+    })
   }
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>

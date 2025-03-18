@@ -55,3 +55,10 @@ export const fetchVerifyUserApi = async (reqBody) => {
   toast.success('Account verify successfully! You can login to enjoy our service')
   return response.data
 }
+
+export const fetchLoginUserApi = async (reqBody) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/login`, reqBody)
+  toast.success('Account login success!')
+  return response.data
+}
+

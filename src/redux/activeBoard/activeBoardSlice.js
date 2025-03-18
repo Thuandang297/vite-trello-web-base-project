@@ -4,7 +4,7 @@ import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 import { mapOrder } from '~/utils/formatter'
 const initialState = {
-  currentActiveBoard: null
+  currentActiveBoard: ''
 }
 
 //Reducer là nơi xử lý các action được gửi từ các component và thay đổi dữ liệu trong store
@@ -32,7 +32,8 @@ export const activeBoardSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchBoardDetailsApi.fulfilled, (state, action) => {
       //action.payload chính là dữ liệu trả về từ server response.data trả về từ api fetchBoardDetailsApi
-      let response = action.payload?.dataBoard
+      let response = action.payload.dataBoard
+      console.log('🚀 ~ builder.addCase ~ response:', response)
       const { cards } = response
       response.columns.forEach(column => {
         const cardsOfEachColumn = cards.filter(card => (card.columnId == column._id))

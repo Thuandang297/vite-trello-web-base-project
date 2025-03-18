@@ -9,6 +9,7 @@ import {
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import { useParams } from 'react-router-dom'
+import { fetchUserDetailsApi } from '~/redux/users/userSlice'
 function Board() {
   const dispatch = useDispatch()
   const { boardId } = useParams()
@@ -16,6 +17,7 @@ function Board() {
   useEffect(() => {
     // const boardId = '67791259500f2e2c2b7e0ac4'
     dispatch(fetchBoardDetailsApi(boardId))
+    // dispatch(fetchUserDetailsApi(null))
   }, [dispatch, boardId])
 
   return (
