@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 const initialState = {
-  activeUser: null
+  userData: null
 }
 export const fetchLoginUserApi = createAsyncThunk(
   'user/fetchLoginUserApi',
@@ -20,13 +20,13 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchLoginUserApi.fulfilled, (state, action) => {
       let response = action.payload
-      state.activeUser = response
+      state.userData = response
     })
   }
 })
 
 export const selectCurrentUser = (state) => {
-  return state.userReducer.activeUser
+  return state.user.userData
 }
 
 export const userReducer = userSlice.reducer
