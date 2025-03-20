@@ -11,10 +11,10 @@ import { selectCurrentUser } from '~/redux/users/userSlice'
 //Xác định các component phải đăng nhập thì mới xem được
 const ProtectedRoute = ({ user }) => {
   if (!user) {
-    <Navigate to={'/login'} replace={true} />
+    return <Navigate to={'/login'} replace={true} />
   }
   //Sử dụng để cho phép đi qua Route cha để tới Route con
-  return <Outlet/>
+  return <Outlet />
 }
 function App() {
   const userData = useSelector(selectCurrentUser)
@@ -30,13 +30,8 @@ function App() {
       <Route path='*' element={<NotFound />} />
 
       {/* Authentication */}
-      <Route element={<ProtectedRoute user={userData} />}>
-        <Route path='/login' element={<Auth />} />
-      </Route>
-      <Route element={<ProtectedRoute user={userData} />}>
-        <Route path='/register' element={<Auth />} />
-      </Route>
-
+      <Route path='/login' element={<Auth />} />
+      <Route path='/register' element={<Auth />} />
       <Route path='/account/verification' element={<AccountVerification />} />
 
     </Routes>

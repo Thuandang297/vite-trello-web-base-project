@@ -30,10 +30,7 @@ function LoginForm() {
     const { email, password } = data
     toast.promise(dispatch(fetchLoginUserApi({ email, password }))
       .then((res) => {if (!res.error) navigate('/')}),
-    { pending: 'Loging...',
-      success: 'Login successfully'
-    }
-    )
+    { pending: 'Loging...' })
   }
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>

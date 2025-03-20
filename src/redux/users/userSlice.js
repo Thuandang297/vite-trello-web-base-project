@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 const initialState = {
@@ -12,6 +13,15 @@ export const fetchLoginUserApi = createAsyncThunk(
   }
 )
 
+export const fetchLogoutUserApi = createAsyncThunk(
+  'user/fetchLogoutUserApi',
+  async (successToast = true) => {
+    const response = await authorizeAxiosInstance.delete(`${API_ROOT}/v1/users/logout`)
+    successToast && toast.success('Logout success')
+    return response.data
+  }
+)
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -21,6 +31,11 @@ export const userSlice = createSlice({
     builder.addCase(fetchLoginUserApi.fulfilled, (state, action) => {
       let response = action.payload
       state.userData = response
+    }),
+    //Khi đăng xuất thì xóa redux data của userData đi
+    // eslint-disable-next-line no-unused-vars
+    builder.addCase(fetchLogoutUserApi.fulfilled, (state, action) => {
+      state.userData = null
     })
   }
 })

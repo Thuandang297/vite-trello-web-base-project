@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import authorizeAxiosInstance from '~/utils/authorizeAxios'
 
 import { API_ROOT } from '~/utils/constants'
@@ -55,6 +56,11 @@ export const fetchVerifyUserApi = async (reqBody) => {
 
 export const fetchLoginUserApi = async (reqBody) => {
   const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/login`, reqBody)
+  return response.data
+}
+
+export const fetchRefreshTokenUserApi = async (reqBody) => {
+  const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/refresh-token`)
   return response.data
 }
 
