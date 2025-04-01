@@ -98,7 +98,7 @@ function ListColumns({ columns }) {
             borderRadius: '6px',
             maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
             height: 'fit-content',
-            bgcolor: '#ffffff3d'
+            // bgcolor: '#ffffff3d'
           }}>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >

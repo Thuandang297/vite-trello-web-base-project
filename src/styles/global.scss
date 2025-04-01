@@ -1,0 +1,11 @@
+@import "variables";
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: all 0.3s ease-in-out;
+}
+
+.appbar {
+  background-color: var(--primary-color) !important;
+}
