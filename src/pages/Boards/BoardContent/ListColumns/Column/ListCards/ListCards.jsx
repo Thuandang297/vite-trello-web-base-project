@@ -1,9 +1,10 @@
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import Box from '@mui/material/Box'
 import Card from './Card/Card'
+import { memo } from 'react'
+import { isEqual } from 'lodash'
 function ListCards(props) {
   const { cards } = props
-
   return (
     <SortableContext items={cards?.map((card => card._id))} strategy={verticalListSortingStrategy}>
       <Box sx={{
@@ -37,4 +38,9 @@ function ListCards(props) {
   )
 }
 
-export default ListCards
+const ListCardsContainer = memo(ListCards, (prevProps, nextProps) => {
+  return isEqual(prevProps.column, nextProps.column)
+})
+
+
+export default ListCardsContainer

@@ -19,6 +19,8 @@ injectStore(store)
 
 import { ConfirmProvider } from 'material-ui-confirm'
 import { BrowserRouter } from 'react-router-dom'
+// import { LoadingProvider } from './context/LoadingContext'
+// import LoadingSpinner from './components/Loading/LoadingSpinner'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <Provider store={store}>
@@ -26,7 +28,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <CssVarsProvider theme={theme}>
           <CssBaseline />
           <ConfirmProvider>
-            <App />
+            {/* <LoadingProvider> */}
+              {/* <LoadingSpinner /> */}
+              <App />
+            {/* </LoadingProvider> */}
           </ConfirmProvider>
           <ToastContainer />
         </CssVarsProvider>

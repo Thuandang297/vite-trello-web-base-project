@@ -4,7 +4,7 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Column from './Column/Column'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,10 +16,15 @@ function ListColumns({ columns }) {
   const dispatch = useDispatch()
   //get data board from store
   const board = useSelector(selectCurrentActiveBoard)
-
   const [openCreateColumn, setOpenCreateColumn] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const toogleOpenCreateColumn = () => setOpenCreateColumn(!openCreateColumn)
+
+  useEffect(() => {
+    return () => {
+      setNewColumnTitle('')
+    }
+  }, [openCreateColumn])
 
   const addNewColumn = async () => {
     if (!newColumnTitle) {

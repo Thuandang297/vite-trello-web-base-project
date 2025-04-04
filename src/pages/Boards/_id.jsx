@@ -3,7 +3,7 @@ import Container from '@mui/material/Container'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import AppBar from '~/components/AppBar/AppBar'
+import AppBar from '~/components/Templates/AppBar/AppBar'
 import {
   fetchBoardDetailsApi
 } from '~/redux/activeBoard/activeBoardSlice'
@@ -14,7 +14,6 @@ function Board() {
   const { boardId } = useParams()
 
   useEffect(() => {
-    // const boardId = '67791259500f2e2c2b7e0ac4'
     dispatch(fetchBoardDetailsApi(boardId))
   }, [dispatch, boardId])
 

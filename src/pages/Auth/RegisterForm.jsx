@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { fetchRegisterUserApi } from '~/apis'
 import { ReactComponent as TrelloIcon } from '~/assets/icon-trello.svg'
-import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
+import FieldErrorAlert from '~/components/Organisms/Form/FieldErrorAlert'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_CONFIRMATION_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 function RegisterForm() {
   const { register, handleSubmit, formState, watch } = useForm()
