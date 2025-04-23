@@ -5,7 +5,7 @@
   "type": "module",
   "author": "Thuan dang",
   "engines": {
-    "node": "20.x"
+    "node": ">=20.x"
   },
   "scripts": {
     "dev": "cross-env BUILD_MODE=development vite --host",
