@@ -10,6 +10,7 @@ import App from '~/App'
 import theme from '~/theme'
 import { injectStore } from '~/utils/authorizeAxios'
 import { store } from './redux/store'
+import { GlobalStyles } from '@mui/material'
 //Cấu hình react router dom với BrowserRouter
 
 const persistor = persistStore(store)
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor} >
+        <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
         <CssVarsProvider theme={theme}>
           <CssBaseline />
           <ConfirmProvider>
