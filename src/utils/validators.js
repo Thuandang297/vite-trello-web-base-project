@@ -7,6 +7,7 @@ export const EMAIL_RULE_MESSAGE = 'Email is invalid. (example@company.com)'
 export const PASSWORD_RULE = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d\W]{8,256}$/
 export const PASSWORD_RULE_MESSAGE = 'Password must include at least 1 letter, a number, and at least 8 characters.'
 export const PASSWORD_CONFIRMATION_MESSAGE = 'Password Confirmation does not match!'
+export const NEW_PASSWORD_CONFIRMATION_MESSAGE = 'New password has not been changed!'
 
 
 // Liên quan đến Validate File

@@ -1,3 +1,4 @@
+import { colors } from '@mui/material'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
 const APP_BAR_HEIGHT = '58px'
@@ -96,8 +97,30 @@ export const theme = extendTheme({
             cursor: 'pointer'
           },
           '.MuiOutlinedInput-input': {
-            color: '#333'
-          }
+            color: theme.palette.primary.main
+          },
+          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.error.main
+          },
+          // hover khi error
+          '&.Mui-error:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.error.main
+          },
+          // focus khi error
+          '&.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.error.main
+          },
+          // hover khi error
+          '&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.text.disabled
+          },
+          '&.Mui-disabled .Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.text.disabled
+          },
+          '&.MuiSelect-iconOutlined': {
+            color: theme.palette.primary.main
+          },
+
         })
       }
     },
@@ -105,7 +128,7 @@ export const theme = extendTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           color: theme.palette.primary.main,
-          fontSize: '0.875rem'
+          fontSize: '1rem'
         })
       }
     },
@@ -135,6 +158,30 @@ export const theme = extendTheme({
             color: theme.palette.primary.textColor,
             backgroundColor: theme.palette.primary.light
           }
+        })
+      }
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          '&.MuiInputAdornment-outlined': {
+            cursor: 'pointer'
+          }
+        })
+      }
+    },
+    MuiList: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main
+        })
+      }
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: () => ({
+          color: '#333'
         })
       }
     }

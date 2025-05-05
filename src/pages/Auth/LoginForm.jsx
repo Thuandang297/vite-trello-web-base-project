@@ -29,9 +29,9 @@ function LoginForm() {
   const submitLogIn = (data) => {
     const { email, password } = data
     toast.promise(dispatch(fetchLoginUserApi({ email, password }))
-      .then((res) => {if (!res.error) navigate('/')}),
-    { pending: 'Loging...' })
+      .then((res) => { if (!res.error) navigate('/') }), { pending: 'Loging...' })
   }
+
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>
       <Zoom in={true} style={{ transitionDelay: '500ms' }}>
