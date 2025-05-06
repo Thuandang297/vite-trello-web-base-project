@@ -20,6 +20,7 @@ injectStore(store)
 
 import { ConfirmProvider } from 'material-ui-confirm'
 import { BrowserRouter } from 'react-router-dom'
+import LoadingOverlay from './components/Atom/LoadingOverLay'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <Provider store={store}>
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <CssBaseline />
           <ConfirmProvider>
             <App />
+            <LoadingOverlay show={false} />
           </ConfirmProvider>
           <ToastContainer />
         </CssVarsProvider>

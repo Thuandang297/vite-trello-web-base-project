@@ -69,3 +69,9 @@ export const fetchChangePasswordUserApi = async (reqBody) => {
   return response.data
 }
 
+export const fetchUpdateUserApi = async (reqBody) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/update`, reqBody)
+  return response.data
+
+}
+
