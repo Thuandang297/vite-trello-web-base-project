@@ -65,7 +65,7 @@ export const fetchRefreshTokenUserApi = async (reqBody) => {
 }
 
 export const fetchChangePasswordUserApi = async (reqBody) => {
-  const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/change-password`, reqBody)
+  const response = await authorizeAxiosInstance.patch(`${API_ROOT}/v1/users/change-password`, reqBody)
   return response.data
 }
 

@@ -1,4 +1,3 @@
-import { colors } from '@mui/material'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
 const APP_BAR_HEIGHT = '58px'
@@ -78,60 +77,6 @@ export const theme = extendTheme({
         })
       }
     },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          color: theme.palette.primary.main,
-          fontSize: '0.875rem',
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main // Change on hover
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main,
-            borderWidth: '1px'// Change when focused
-          },
-          '&:hover .Mui-disabled': {
-            cursor: 'pointer'
-          },
-          '.MuiOutlinedInput-input': {
-            color: theme.palette.primary.main
-          },
-          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.error.main
-          },
-          // hover khi error
-          '&.Mui-error:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.error.main
-          },
-          // focus khi error
-          '&.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.error.main
-          },
-          // hover khi error
-          '&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.text.disabled
-          },
-          '&.Mui-disabled .Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.text.disabled
-          },
-          '&.MuiSelect-iconOutlined': {
-            color: theme.palette.primary.main
-          },
-
-        })
-      }
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          color: theme.palette.primary.main,
-          fontSize: '1rem'
-        })
-      }
-    },
     MuiChip: {
       styleOverrides: {
         root: ({ theme }) => ({
@@ -158,30 +103,6 @@ export const theme = extendTheme({
             color: theme.palette.primary.textColor,
             backgroundColor: theme.palette.primary.light
           }
-        })
-      }
-    },
-    MuiInputAdornment: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          color: theme.palette.primary.main,
-          '&.MuiInputAdornment-outlined': {
-            cursor: 'pointer'
-          }
-        })
-      }
-    },
-    MuiList: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          color: theme.palette.primary.main
-        })
-      }
-    },
-    MuiMenuItem: {
-      styleOverrides: {
-        root: () => ({
-          color: '#333'
         })
       }
     }

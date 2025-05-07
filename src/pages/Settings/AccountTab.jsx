@@ -4,9 +4,9 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { Avatar, Box, Button, InputAdornment, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Controller, useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { fetchUpdateUserApi } from '~/apis'
-import { selectCurrentUser } from '~/redux/users/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { fetchUpdateUserApi, selectCurrentUser, setUser } from '~/redux/users/userSlice'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -21,15 +21,25 @@ const VisuallyHiddenInput = styled('input')({
 })
 
 const AccountTab = () => {
-  const { handleSubmit, control } = useForm()
+  const user = useSelector(selectCurrentUser)
 
-  const onSubmit = (data) => {
-    fetchUpdateUserApi(data)
+  const initialValues = {
+    displayName: user.displayName,
+  }
+  const { handleSubmit, control } = useForm({
+    defaultValues: initialValues
+  })
+  const dispatch = useDispatch()
+
+  const handleUpdateUserInfo = (data) => {
+    const reqBody = {
+      displayName: data.displayName
+    }
+    dispatch(fetchUpdateUserApi(reqBody))
   }
 
-  const user = useSelector(selectCurrentUser)
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleUpdateUserInfo)}>
       <Box sx={{ minWidth: '500px', height: 'fit-content', padding: '1em', display: 'flex', flexDirection: 'column', backgroundColor: '#fff', gap: 2, borderRadius: '5px' }} >
         {/* Picture and upload */}
         <Box sx={{ display: 'flex', padding: 1 }}>
@@ -47,7 +57,9 @@ const AccountTab = () => {
               sx={{ color: '#fff', fontSize: '13px' }}>Upload
               <VisuallyHiddenInput
                 type="file"
-                onChange={(event) => console.log(event.target.files)}
+                onChange={(event) =>
+                  console.log(event.target.files)
+                }
                 multiple
               />
             </Button>
@@ -62,36 +74,55 @@ const AccountTab = () => {
         {/* Mail and name */}
         {/* Email */}
         <Box sx={{ display: 'flex', alignItems: 'center' }} >
-          <TextField
-            variant="outlined"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <MailIcon sx={{ color: '#fff', mr: 1, my: 0.5 }} />
-                </InputAdornment>
-              )
-            }}
-            label="Your email" disabled sx={{ width: '100%' }} defaultValue={user?.email} />
+          <Controller
+            control={control}
+            name='email'
+            render={({ field }) =>
+              <TextField
+                {...field}
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailIcon sx={{ color: '#fff', mr: 1, my: 0.5 }} />
+                    </InputAdornment>
+                  )
+                }}
+                label="Your email"
+                defaultValue={user.email}
+                disabled
+                sx={{ width: '100%' }} />
+            }
+          />
+
         </Box>
         {/* User name */}
         <Box sx={{ display: 'flex', alignItems: 'center' }} >
-          <TextField
-            variant="outlined"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AccountCircleIcon sx={{ mr: 1, my: 0.5 }} />
-                </InputAdornment>
-              )
-            }}
-            label="User Name" disabled sx={{ width: '100%' }} defaultValue={user?.userName} />
+          <Controller
+            control={control}
+            name='userName'
+            defaultValue={user.userName}
+            render={({ field }) =>
+              <TextField
+                {...field}
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircleIcon sx={{ mr: 1, my: 0.5 }} />
+                    </InputAdornment>
+                  )
+                }}
+                label="User Name" disabled sx={{ width: '100%' }} />}
+
+          />
+
         </Box>
         {/* Display name */}
         <Box sx={{ display: 'flex', alignItems: 'center' }} >
           <Controller
             name="displayName"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <>
                 <TextField
@@ -104,7 +135,8 @@ const AccountTab = () => {
                       </InputAdornment>
                     )
                   }}
-                  label="Your display name" sx={{ width: '100%' }} defaultValue={user?.displayName} />
+                  label="Your display name" sx={{ width: '100%' }}
+                />
               </>
             )} />
         </Box>

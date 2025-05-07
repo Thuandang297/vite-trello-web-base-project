@@ -7,8 +7,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 import { fetchChangePasswordUserApi } from '~/apis'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
+import { fetchLogoutUserApi } from '~/redux/users/userSlice'
 import { NEW_PASSWORD_CONFIRMATION_MESSAGE, PASSWORD_CONFIRMATION_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 const SecurityTab = () => {
   const [hiddenPassword, setHiddenPassword] = useState({
@@ -18,11 +21,15 @@ const SecurityTab = () => {
   })
   const { register, handleSubmit, watch, setValue, clearErrors, formState, control } = useForm()
   const { errors } = formState
+  const dispatch = useDispatch()
   const onSubmit = (data) => {
     clearErrors('confirmPassword')
-
     //Call api to change password
-    fetchChangePasswordUserApi(data)
+    fetchChangePasswordUserApi(data).then(response => {
+      //Show toast success
+      toast.success(response?.message || 'Password has changed!')
+      dispatch(fetchLogoutUserApi())
+    })
   }
   const currentPassword = watch('currentPassword')
   const newPassword = watch('newPassword')
@@ -198,7 +205,7 @@ const SecurityTab = () => {
           fullWidth
           className={'interceptor-loading'}
         >
-          Login
+          Save
         </Button>
       </Box>
     </form >

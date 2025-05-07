@@ -51,14 +51,14 @@ authorizeAxiosInstance.interceptors.response.use((response) => {
     return Promise.reject(new Error(data.message))
   }
   //Sử dụng kĩ thuật chặn spam click
-  toast.success(data.message || 'Yêu cầu thực hiện thành công!', {
-    position: 'bottom-left',
-    autoClose: 2000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    draggable: true,
-    theme: 'light'
-  })
+  // toast.success(data.message || 'Yêu cầu thực hiện thành công!', {
+  //   position: 'bottom-left',
+  //   autoClose: 2000,
+  //   hideProgressBar: true,
+  //   closeOnClick: true,
+  //   draggable: true,
+  //   theme: 'light'
+  // })
   return response
 }, (error) => {
   let errorMessage = error.message

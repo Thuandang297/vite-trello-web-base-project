@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <CssBaseline />
           <ConfirmProvider>
             <App />
-            <LoadingOverlay show={false} />
+            {/* <LoadingOverlay show={false} /> */}
           </ConfirmProvider>
           <ToastContainer />
         </CssVarsProvider>

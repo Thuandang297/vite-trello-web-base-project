@@ -1,7 +1,7 @@
 // src/components/LoadingOverlay.tsx
 import { Box, Button } from '@mui/material'
 import { Spin } from 'antd'
-export default function LoadingOverlay(show = true) {
+export default function LoadingOverlay(show = false) {
   if (!show) return null
 
   return (
