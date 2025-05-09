@@ -6,7 +6,9 @@ import { styled } from '@mui/material/styles'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { fetchUploadPersonalImage } from '~/apis'
 import { fetchUpdateUserApi, selectCurrentUser, setUser } from '~/redux/users/userSlice'
+import { singleFileValidator } from '~/utils/validators'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -38,6 +40,24 @@ const AccountTab = () => {
     dispatch(fetchUpdateUserApi(reqBody))
   }
 
+  const handleUploadImage = async (event) => {
+    const file = event.target.files[0]
+
+    //validate file
+    const validateFile = singleFileValidator(file)
+    if (validateFile) return toast.warning(validateFile)
+
+    //create a formData
+    const formData = new FormData()
+
+    //add value file to formData
+    formData.append('file', file)
+    //call api to uploadFile
+    dispatch(fetchUpdateUserApi(formData))
+    //Clear cache after upload file
+    event.target.values = ''
+  }
+
   return (
     <form onSubmit={handleSubmit(handleUpdateUserInfo)}>
       <Box sx={{ minWidth: '500px', height: 'fit-content', padding: '1em', display: 'flex', flexDirection: 'column', backgroundColor: '#fff', gap: 2, borderRadius: '5px' }} >
@@ -58,7 +78,7 @@ const AccountTab = () => {
               <VisuallyHiddenInput
                 type="file"
                 onChange={(event) =>
-                  console.log(event.target.files)
+                  handleUploadImage(event)
                 }
                 multiple
               />

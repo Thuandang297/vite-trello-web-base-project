@@ -8,10 +8,8 @@ import { Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { toast } from 'react-toastify'
-import { fetchChangePasswordUserApi } from '~/apis'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import { fetchLogoutUserApi } from '~/redux/users/userSlice'
+import { fetchLogoutUserApi, fetchUpdateUserApi } from '~/redux/users/userSlice'
 import { NEW_PASSWORD_CONFIRMATION_MESSAGE, PASSWORD_CONFIRMATION_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 const SecurityTab = () => {
   const [hiddenPassword, setHiddenPassword] = useState({
@@ -23,13 +21,16 @@ const SecurityTab = () => {
   const { errors } = formState
   const dispatch = useDispatch()
   const onSubmit = (data) => {
+    console.log('🚀 ~ onSubmit ~ data:', data)
     clearErrors('confirmPassword')
     //Call api to change password
-    fetchChangePasswordUserApi(data).then(response => {
-      //Show toast success
-      toast.success(response?.message || 'Password has changed!')
-      dispatch(fetchLogoutUserApi())
-    })
+    dispatch(fetchUpdateUserApi(data))
+    dispatch(fetchLogoutUserApi())
+    // fetchChangePasswordUserApi(data).then(response => {
+    //   //Show toast success
+    //   toast.success(response?.message || 'Password has changed!')
+    //   dispatch(fetchLogoutUserApi())
+    // })
   }
   const currentPassword = watch('currentPassword')
   const newPassword = watch('newPassword')

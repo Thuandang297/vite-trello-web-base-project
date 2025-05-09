@@ -75,3 +75,12 @@ export const fetchUpdateUserApi = async (reqBody) => {
 
 }
 
+export const fetchUploadPersonalImage = async (formData) => {
+  const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/upload-image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return response.data
+}
+

@@ -11,17 +11,23 @@ export const NEW_PASSWORD_CONFIRMATION_MESSAGE = 'New password has not been chan
 
 
 // Liên quan đến Validate File
-export const LIMIT_COMMON_FILE_SIZE = 10485760 // byte = 10 MB
-export const ALLOW_COMMON_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png']
+export const VALIDATE_MAX_SIZE = 2 * 1024 * 1024 //2MB
+export const VALIDATE_FILE_TYPE_MESSAGE = 'File type incorrect! Please upload true file type (jpeg, jpg, png)!'
+export const VALIDATE_MAX_SIZE_MESSAGE = 'Please upload file < 2MB!'
+export const VALIDATE_FILE_PROPERTY_MESSAGE = 'File can not have bank values!'
+export const UPLOAD_FILE_SUCCESS_MESSAGE = 'File upload success!'
+export const UPLOAD_FILE_FAIL_MESSAGE = 'File upload fail!'
+export const VALIDATE_FILE_TYPE = ['image/jpg', 'image/jpeg', 'image/png']
 export const singleFileValidator = (file) => {
   if (!file || !file.name || !file.size || !file.type) {
-    return 'File cannot be blank.'
+    return VALIDATE_FILE_PROPERTY_MESSAGE
   }
-  if (file.size > LIMIT_COMMON_FILE_SIZE) {
-    return 'Maximum file size exceeded. (10MB)'
+  if (file.size > VALIDATE_MAX_SIZE) {
+    return VALIDATE_MAX_SIZE_MESSAGE
   }
-  if (!ALLOW_COMMON_FILE_TYPES.includes(file.type)) {
-    return 'File type is invalid. Only accept jpg, jpeg and png'
+  if (!VALIDATE_FILE_TYPE.includes(file.type)) {
+    return VALIDATE_FILE_TYPE_MESSAGE
   }
   return null
 }
+
