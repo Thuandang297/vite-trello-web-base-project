@@ -64,3 +64,23 @@ export const fetchRefreshTokenUserApi = async (reqBody) => {
   return response.data
 }
 
+export const fetchChangePasswordUserApi = async (reqBody) => {
+  const response = await authorizeAxiosInstance.patch(`${API_ROOT}/v1/users/change-password`, reqBody)
+  return response.data
+}
+
+export const fetchUpdateUserApi = async (reqBody) => {
+  const response = await authorizeAxiosInstance.put(`${API_ROOT}/v1/users/update`, reqBody)
+  return response.data
+
+}
+
+export const fetchUploadPersonalImage = async (formData) => {
+  const response = await authorizeAxiosInstance.post(`${API_ROOT}/v1/users/upload-image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return response.data
+}
+

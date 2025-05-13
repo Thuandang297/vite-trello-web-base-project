@@ -7,6 +7,7 @@ import Auth from '~/pages/Auth/Auth'
 import AccountVerification from '~/pages/Auth/AccountVerification'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/users/userSlice'
+import Settings from './pages/Settings/Setting'
 
 //Xác định các component phải đăng nhập thì mới xem được
 const ProtectedRoute = ({ user }) => {
@@ -25,6 +26,10 @@ function App() {
       {/* Bọc Route này vào để bảo vệ không cho Navigate linh tinh */}
       <Route element={<ProtectedRoute user={userData} />}>
         <Route path='/boards/:boardId' element={<Board />} />
+        <Route path='/settings/account' element={<Settings />} />
+        <Route path='/settings/sercurity' element={<Settings />} />
+
+
       </Route>
       {/* Khi không tìm thấy đường dẫn nào khớp với các Route trên, sẽ hiển thị thông báo 404 Not found */}
       <Route path='*' element={<NotFound />} />

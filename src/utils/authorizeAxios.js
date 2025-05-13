@@ -35,14 +35,37 @@ let requestTokenPromise = null
 // Add a response interceptor
 // Can thiệp vào giữa các response nhận về
 authorizeAxiosInstance.interceptors.response.use((response) => {
-  //Sử dụng kĩ thuật chặn spam click
   interceptorLoadingElements(false)
+
+  //Trường hợp trả về mã thành công nhưng trạng thái lỗi
+  const { data } = response
+  if (data.success === false) {
+    toast.error(data.message || 'Có lỗi xảy ra từ server!', {
+      position: 'bottom-left',
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      theme: 'light'
+    })
+    return Promise.reject(new Error(data.message))
+  }
+  //Sử dụng kĩ thuật chặn spam click
+  // toast.success(data.message || 'Yêu cầu thực hiện thành công!', {
+  //   position: 'bottom-left',
+  //   autoClose: 2000,
+  //   hideProgressBar: true,
+  //   closeOnClick: true,
+  //   draggable: true,
+  //   theme: 'light'
+  // })
   return response
 }, (error) => {
   let errorMessage = error.message
   if (error?.response?.data?.message) {
     errorMessage = error.response.data.message
   }
+
   interceptorLoadingElements(false)
   /*Xử lý việc refresh Token tự động
   TH1:Khi mã lỗi 401 thì thực hiện logout luôn
@@ -85,6 +108,14 @@ authorizeAxiosInstance.interceptors.response.use((response) => {
       return authorizeAxiosInstance(originalRequests)
     })
   }
+  toast.error(errorMessage || 'Có lỗi xảy ra từ server!', {
+    position: 'bottom-left',
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    draggable: true,
+    theme: 'light'
+  })
   return Promise.reject(error)
 })
 

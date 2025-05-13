@@ -10,6 +10,7 @@ import App from '~/App'
 import theme from '~/theme'
 import { injectStore } from '~/utils/authorizeAxios'
 import { store } from './redux/store'
+import { GlobalStyles } from '@mui/material'
 //Cấu hình react router dom với BrowserRouter
 
 const persistor = persistStore(store)
@@ -19,14 +20,17 @@ injectStore(store)
 
 import { ConfirmProvider } from 'material-ui-confirm'
 import { BrowserRouter } from 'react-router-dom'
+import LoadingOverlay from './components/Atom/LoadingOverLay'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor} >
+        <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
         <CssVarsProvider theme={theme}>
           <CssBaseline />
           <ConfirmProvider>
             <App />
+            {/* <LoadingOverlay show={false} /> */}
           </ConfirmProvider>
           <ToastContainer />
         </CssVarsProvider>

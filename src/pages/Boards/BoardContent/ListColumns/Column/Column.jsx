@@ -147,7 +147,7 @@ const Column = (props) => {
           sx={{
             minWidth: '300px',
             maxWidth: '300px',
-            bgcolor: (theme) => (theme.palette.mode == 'dark' ? '#6c6c6c' : '#ebecf0'),
+            bgcolor: (theme) => (theme.palette.primary.light),
             margin: 1,
             borderRadius: '6px',
             maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
