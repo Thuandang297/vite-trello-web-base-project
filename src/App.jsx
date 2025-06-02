@@ -8,6 +8,7 @@ import AccountVerification from '~/pages/Auth/AccountVerification'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/users/userSlice'
 import Settings from './pages/Settings/Setting'
+import BooardList from './pages/Boards'
 
 //Xác định các component phải đăng nhập thì mới xem được
 const ProtectedRoute = ({ user }) => {
@@ -22,13 +23,13 @@ function App() {
   return (
     <Routes>
       {/* Sử dụng replace={true} để thay thế đường dẫn hiện tại trong history bằng đường dẫn mới */}
-      <Route path='/' element={<Navigate to={'/boards/67791259500f2e2c2b7e0ac4'} replace={true} />} />
+      <Route path='/' element={<Navigate to={'/boards'} replace={true} />} />
       {/* Bọc Route này vào để bảo vệ không cho Navigate linh tinh */}
       <Route element={<ProtectedRoute user={userData} />}>
         <Route path='/boards/:boardId' element={<Board />} />
         <Route path='/settings/account' element={<Settings />} />
         <Route path='/settings/sercurity' element={<Settings />} />
-
+        <Route path='/boards' element={<BooardList />} />
 
       </Route>
       {/* Khi không tìm thấy đường dẫn nào khớp với các Route trên, sẽ hiển thị thông báo 404 Not found */}

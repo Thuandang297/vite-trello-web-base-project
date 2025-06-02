@@ -17,7 +17,12 @@ import Tooltip from '@mui/material/Tooltip'
 import Profiles from './Menus/Profiles'
 import QueueIcon from '@mui/icons-material/Queue'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 function AppBar() {
+  const [openCreateBoard, setOpenCreateBoard] = useState(false)
+  const onCreateBoard = () => {
+    setOpenCreateBoard(true)
+  }
   return (
     <Box sx={{
       width: '100%',
@@ -31,12 +36,22 @@ function AppBar() {
       paddingX: '2rem'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }} gap={2} >
-        <AppsIcon sx={{ color: 'primary.main' }} />
+        <Box>
+          <Button
+            component={Link}
+            to="/boards"
+            sx={{
+              display: 'flex', alignItems: 'center', '&:hover': {
+                opacity: '0.1'
+              }
+            }}>
+            <SvgIcon component={AppsIcon} inheritViewBox sx={{ color: 'primary.main' }} />
+          </Button>
+        </Box>
         <Box>
           <Button sx={{
             display: 'flex', alignItems: 'center', '&:hover': {
-              opacity: '0.7',
-              backgroundColor: (theme) => theme.palette.primary.main
+              opacity: '0.1'
             }
           }} gap={0.5}>
             <SvgIcon component={TrelloIcon} inheritViewBox fontSize='small' sx={{ color: 'primary.main' }} />
@@ -61,7 +76,7 @@ function AppBar() {
           <Templates />
         </Box>
 
-        <Button variant="outlined" endIcon={<QueueIcon />}>Create</Button>
+        <Button onClick={onCreateBoard} variant="outlined" endIcon={<QueueIcon />}>Create</Button>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
         <TextField id="outlined-search" label="Search..." size='small' type="search" sx={{ minWidth: '120px' }} />
