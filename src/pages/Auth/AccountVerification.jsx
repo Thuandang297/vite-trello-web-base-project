@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { fetchVerifyUserApi } from '~/apis'
-import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
+import PageLoadingSpinner from '~/components/Molecules/Loading/PageLoadingSpinner'
 
 const AccountVerification = () => {
   //Tao state để biết được tài khoản đang được verify thành công hay chưa

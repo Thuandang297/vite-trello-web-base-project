@@ -43,16 +43,13 @@ function BoardContent() {
   const sensors = useSensors(
     mouseSensor,
     touchSensor,
-    // keyboardSensor,
     poiterSensor
   )
   const TYPE = {
     COLUMN: 1,
     CARD: 2
   }
-
   const board = useSelector(selectCurrentActiveBoard)
-
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeItemType, setActiveItemType] = useState()
   const [activeItemData, setActiveItemData] = useState()
@@ -65,7 +62,7 @@ function BoardContent() {
   const collisionDetectionStrategy = useCallback((args) => {
     const { droppableContainers } = args
     //Check drag drop column
-    if (activeItemType == TYPE.COLUMN) {
+    if (activeItemType === TYPE.COLUMN) {
       const columnArgs = { ...args, droppableContainers: droppableContainers.filter(c => c['data'].current.cards !== undefined) }
       return closestCorners(columnArgs)
     }
@@ -120,8 +117,13 @@ function BoardContent() {
     })
   }
   useEffect(() => {
+    if (!board || board?.columns?.length === 0) return
     const ordered = mapOrder(board?.columns, board?.columnOrderIds, '_id')
     setOrderedColumns([...ordered])
+
+    return () => {
+      setOrderedColumns([])
+    }
   }, [board])
 
   const findColumnByCardId = (cardId) => {

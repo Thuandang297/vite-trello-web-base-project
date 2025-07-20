@@ -12,6 +12,7 @@ import { injectStore } from '~/utils/authorizeAxios'
 import { store } from './redux/store'
 import { GlobalStyles } from '@mui/material'
 //Cấu hình react router dom với BrowserRouter
+import 'antd/dist/reset.css' // phiên bản mới AntD 5+ cần import reset
 
 const persistor = persistStore(store)
 
@@ -20,7 +21,10 @@ injectStore(store)
 
 import { ConfirmProvider } from 'material-ui-confirm'
 import { BrowserRouter } from 'react-router-dom'
-import LoadingOverlay from './components/Atom/LoadingOverLay'
+import { LoadingProvider } from './context/LoadingContext'
+import PageLoadingSpinner from './components/Molecules/Loading/PageLoadingSpinner'
+// import { LoadingProvider } from './context/LoadingContext'
+// import LoadingSpinner from './components/Loading/LoadingSpinner'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename='/'>
     <Provider store={store}>
@@ -29,13 +33,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <CssVarsProvider theme={theme}>
           <CssBaseline />
           <ConfirmProvider>
+            {/* <LoadingProvider> */}
+            {/* <PageLoadingSpinner caption={'Đang tải dữ liệu'} /> */}
+            {/* </LoadingProvider> */}
             <App />
-            {/* <LoadingOverlay show={false} /> */}
-          </ConfirmProvider>
-          <ToastContainer />
-        </CssVarsProvider>
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+<<<<<<< HEAD
+  {/* <LoadingOverlay show={false} /> */ }
+=======
+
+>>>>>>> feature/update_menu_bar
+          </ConfirmProvider >
+  <ToastContainer />
+        </CssVarsProvider >
+      </PersistGate >
+    </Provider >
+  </BrowserRouter >
 
 )

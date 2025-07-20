@@ -1,6 +1,6 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
-const APP_BAR_HEIGHT = '58px'
+const APP_BAR_HEIGHT = '48px'
 const BOARD_BAR_HEIGHT = '60px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
 const COLUMN_HEADER_HEIGHT = '50px'
@@ -30,10 +30,10 @@ export const theme = extendTheme({
     dark: {
       palette: {
         primary: {
-          main: '#086b58',
+          main: '#03a9f4',
           light: '#fff',
           dark: '#333',
-          textColor: '#fff'
+          textColor: '#333'
         }
       }
     }
@@ -65,6 +65,7 @@ export const theme = extendTheme({
     },
     MuiButton: {
       styleOverrides: {
+<<<<<<< HEAD
         root: ({ theme }) => ({
           fontSize: '1rem',
           textTransform: 'none',
@@ -73,6 +74,28 @@ export const theme = extendTheme({
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.light,
             transition: 'all 0.3s ease'
+=======
+        root: {
+          fontSize: '0.875rem',
+          textTransform: 'none'
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem',
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main // Change on hover
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main,
+            borderWidth: '1px'// Change when focused
+>>>>>>> feature/update_menu_bar
           }
         })
       }
@@ -100,7 +123,7 @@ export const theme = extendTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           '&.MuiCard-root': {
-            color: theme.palette.primary.textColor,
+            color: theme.palette.primary.main,
             backgroundColor: theme.palette.primary.light
           }
         })

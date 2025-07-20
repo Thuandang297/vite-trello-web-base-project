@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import SelectMode from '~/components/ModeSelect/ModeSelect'
+import SelectMode from '~/components/Molecules/ModeSelect/ModeSelect'
 import AppsIcon from '@mui/icons-material/Apps'
 import Button from '@mui/material/Button'
 import { ReactComponent as TrelloIcon } from '~/assets/icon-trello.svg'
@@ -26,9 +26,9 @@ function AppBar() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: 2,
+      gap: 1,
       overflowX: 'auto',
-      paddingX: '2rem'
+      padding: '0.5rem'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }} gap={2} >
         <AppsIcon sx={{ color: 'primary.main' }} />

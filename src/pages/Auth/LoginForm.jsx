@@ -14,7 +14,7 @@ import { ReactComponent as TrelloIcon } from '~/assets/icon-trello.svg'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
+import FieldErrorAlert from '~/components/Organisms/Form/FieldErrorAlert'
 import { fetchLoginUserApi } from '~/redux/users/userSlice'
 import { EMAIL_RULE, EMAIL_RULE_MESSAGE, FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
 function LoginForm() {

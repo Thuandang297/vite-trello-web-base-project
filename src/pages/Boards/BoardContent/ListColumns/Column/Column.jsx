@@ -18,21 +18,20 @@ import ListItemText from '@mui/material/ListItemText'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { toast } from 'react-toastify'
 import ListCards from './ListCards/ListCards'
-import ConfirmDeleteDialog from '~/components/ConfirmDeleteDialog'
+import ConfirmDeleteDialog from '~/components/Organisms/ConfirmDeleteDialog'
 import { fetchCreateNewCardApi, fetchDeleteColumnApi } from '~/apis'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBoardDetailsApi, selectCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 const Column = (props) => {
   const { column } = props
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column?._id,
     data: { ...column }
   })
-
   const dndKitColumnStyles = {
     transform: CSS.Translate.toString(transform),
     transition,
@@ -147,7 +146,7 @@ const Column = (props) => {
           sx={{
             minWidth: '300px',
             maxWidth: '300px',
-            bgcolor: (theme) => (theme.palette.primary.light),
+            bgcolor: (theme) => ('#ebecf0'),
             margin: 1,
             borderRadius: '6px',
             maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
@@ -366,4 +365,9 @@ const Column = (props) => {
   )
 }
 
-export default Column
+const ColumnContainer = memo(Column, (prevProps, nextProps) => {
+  return isEqual(prevProps.column, nextProps.column)
+})
+
+
+export default ColumnContainer
