@@ -9,9 +9,10 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
+import { isEqual } from 'lodash'
+import { memo } from 'react'
 function Card(props) {
   const { card } = props
-
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card?._id,
     data: { ...card }
@@ -66,4 +67,9 @@ function Card(props) {
   )
 }
 
-export default Card
+const CardContainer = memo(Card, (prevProps, nextProps) => {
+  return isEqual(prevProps.card._id, nextProps.card._id)
+})
+
+
+export default CardContainer

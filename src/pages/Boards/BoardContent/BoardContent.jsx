@@ -18,8 +18,12 @@ import { mapOrder } from '~/utils/formatter'
 import Columns from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 import ListColumns from './ListColumns/ListColumns'
-function BoardContent(props) {
-  const { board, createNewColumnApi, createNewCardApi, onUpdateOrderedColumn, onMoveCardInColumn, onMoveCardOutColumn, onGetDetailBoard } = props
+import { cloneDeep } from 'lodash'
+import { fetchMovingCardsApi, fetchUpdateBoardApi, fetchUpdateColumnApi } from '~/apis'
+import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
+import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+function BoardContent() {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10
@@ -39,13 +43,13 @@ function BoardContent(props) {
   const sensors = useSensors(
     mouseSensor,
     touchSensor,
-    // keyboardSensor,
     poiterSensor
   )
   const TYPE = {
     COLUMN: 1,
     CARD: 2
   }
+  const board = useSelector(selectCurrentActiveBoard)
   const [orderedColumns, setOrderedColumns] = useState([])
   const [activeItemType, setActiveItemType] = useState()
   const [activeItemData, setActiveItemData] = useState()
@@ -58,7 +62,7 @@ function BoardContent(props) {
   const collisionDetectionStrategy = useCallback((args) => {
     const { droppableContainers } = args
     //Check drag drop column
-    if (activeItemType == TYPE.COLUMN) {
+    if (activeItemType === TYPE.COLUMN) {
       const columnArgs = { ...args, droppableContainers: droppableContainers.filter(c => c['data'].current.cards !== undefined) }
       return closestCorners(columnArgs)
     }
@@ -90,7 +94,8 @@ function BoardContent(props) {
 
   const updateColumnsWhenDragDropCard = (activeColumn, activeCardIndex, overColumn, overCardIndex, activeDraggingCardData) => {
     return setOrderedColumns(prevOrderedColumn => {
-      return prevOrderedColumn?.map(column => {
+      return prevOrderedColumn?.map(columnItem => {
+        const column = cloneDeep(columnItem)
         if (column._id == overColumn._id) {
 
           // Add active item card to over column in index newIndex
@@ -112,8 +117,13 @@ function BoardContent(props) {
     })
   }
   useEffect(() => {
+    if (!board || board?.columns?.length === 0) return
     const ordered = mapOrder(board?.columns, board?.columnOrderIds, '_id')
     setOrderedColumns([...ordered])
+
+    return () => {
+      setOrderedColumns([])
+    }
   }, [board])
 
   const findColumnByCardId = (cardId) => {
@@ -162,7 +172,7 @@ function BoardContent(props) {
     updateColumnsWhenDragDropCard(activeColumn, activeCardIndex, overColumn, newIndex, activeDraggingCardData)
   }
 
-  const handleMoveCardInColumn = (active, over) => {
+  const onMoveCardInColumn = (active, over) => {
     //Check drag card
     const dragedData = active?.id
     const overData = over?.id
@@ -178,11 +188,12 @@ function BoardContent(props) {
     if (oldIndex === newIndex) return
     //3.Take arrayMove for list card to change index of card to target index
     const listCardOrderIds = arrayMove(columnOfActiveCard.cardOrderIds, oldIndex, newIndex)
-    columnOfActiveCard.cardOrderIds = listCardOrderIds
-    columnOfActiveCard.cards = mapOrder(columnOfActiveCard?.cards, listCardOrderIds, '_id')
+    const columnActived = cloneDeep(columnOfActiveCard)
+    columnActived.cardOrderIds = listCardOrderIds
+    columnActived.cards = mapOrder(columnOfActiveCard?.cards, listCardOrderIds, '_id')
     //4.Set list column again
     setOrderedColumns(curr => (curr?.map(column => {
-      if (column._id == columnId) return columnOfActiveCard
+      if (column._id == columnId) return columnActived
       return column
     })))
     //Call api to update position of card in board
@@ -190,7 +201,7 @@ function BoardContent(props) {
       columnId: columnId,
       cardOrderIds: listCardOrderIds
     }
-    onMoveCardInColumn(data)
+    handleMoveCardInColumn(data)
   }
 
   const handleMoveCardOutColumn = (active) => {
@@ -227,13 +238,13 @@ function BoardContent(props) {
       // Update the column again
       setOrderedColumns(dndOderedColumns)
       //Call api to update orderedColumn
-      onUpdateOrderedColumn(dndOderedColumns.map(e => e._id))
+      handleUpdateOrderedColumn(dndOderedColumns.map(e => e._id))
     }
     else if (activeItemType == TYPE.CARD) {
       //When drag card in one column
       const checkDragInColumn = activeItemData.columnId === overItemData._id
       if (checkDragInColumn) {
-        handleMoveCardInColumn(active, over)
+        onMoveCardInColumn(active, over)
       } else {
         handleMoveCardOutColumn(active, over)
       }
@@ -242,6 +253,67 @@ function BoardContent(props) {
     setActiveItemType(null)
   }
 
+  const handleUpdateOrderedColumn = async (orderedColumnIds) => {
+    const boardId = board._id
+    const updatedBoard = {
+      title: board.title,
+      description: board.description,
+      type: board.type,
+      columnOrderIds: [...orderedColumnIds]
+    }
+    await fetchUpdateBoardApi(updatedBoard, boardId).then(() => {
+      return toast.success('Success', {
+        position: 'bottom-left',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light'
+      })
+    }).catch(error => {
+      return toast.error(error.message, {
+        position: 'bottom-left',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+  }
+
+  const handleMoveCardInColumn = async (data) => {
+    const updatedColumn = {
+      boardId: board._id,
+      cardOrderIds: data.cardOrderIds,
+      cards: data?.cards
+    }
+    await fetchUpdateColumnApi(updatedColumn, data.columnId).then(() => {
+      return toast.success('Move card in column success!', {
+        position: 'bottom-left',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+  }
+
+  const onMoveCardOutColumn = async (data) => {
+    await fetchMovingCardsApi(data).then(() => {
+      return toast.success('Move card into a new column success!', {
+        position: 'bottom-left',
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        draggable: true,
+        theme: 'light'
+      })
+    })
+  }
   return (
     <Box sx={{
       width: '100%',
@@ -262,7 +334,7 @@ function BoardContent(props) {
         onDragOver={handleDragOver}
         onDragStart={handleDragStart}
       >
-        <ListColumns columns={orderedColumns} createNewColumnApi={createNewColumnApi} createNewCardApi={createNewCardApi} onGetDetailBoard={onGetDetailBoard}/>
+        <ListColumns columns={orderedColumns}/>
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeItemType && null}
           {activeItemType && activeItemType === TYPE.COLUMN && <Columns column={activeItemData} />}

@@ -4,13 +4,27 @@ import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Column from './Column/Column'
-function ListColumns({ columns, createNewColumnApi, createNewCardApi, onGetDetailBoard }) {
+import { useDispatch, useSelector } from 'react-redux'
+import { selectCurrentActiveBoard, updateCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { fetchCreateNewColumnApi } from '~/apis'
+import { generatePlaceHolderCard } from '~/utils/formatter'
+import { cloneDeep } from 'lodash'
+function ListColumns({ columns }) {
+  const dispatch = useDispatch()
+  //get data board from store
+  const board = useSelector(selectCurrentActiveBoard)
   const [openCreateColumn, setOpenCreateColumn] = useState(false)
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const toogleOpenCreateColumn = () => setOpenCreateColumn(!openCreateColumn)
+
+  useEffect(() => {
+    return () => {
+      setNewColumnTitle('')
+    }
+  }, [openCreateColumn])
 
   const addNewColumn = async () => {
     if (!newColumnTitle) {
@@ -24,25 +38,38 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi, onGetDetai
         theme: 'light'
       })
     }
-    const newColumnData = {
-      title: newColumnTitle
+    const newReqBody = {
+      title: newColumnTitle,
+      boardId: board._id
     }
-    await createNewColumnApi(newColumnData).then((response) => {
-      if (!response) return
-      toast.success('Creat column success!', {
-        position: 'bottom-left',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: 'light'
+    await fetchCreateNewColumnApi(newReqBody)
+      .then(createdColumn => {
+        //Khi them moi column thi mac dinh them generatePlaceHolderCard vao cho column
+        createdColumn.cards = [generatePlaceHolderCard(createdColumn)]
+        createdColumn.cardOrderIds = [generatePlaceHolderCard(createdColumn)._id]
+        const newBoard = cloneDeep(board)
+        newBoard.columnOrderIds.push(createdColumn._id)
+        newBoard.columns.push(createdColumn)
+        const boardData = cloneDeep(newBoard)
+        dispatch(updateCurrentActiveBoard(boardData))
+
+        //Reset input
+        setNewColumnTitle('')
+        setOpenCreateColumn(false)
+
+        //Show toast
+        return toast.success('Create column success!', {
+          position: 'bottom-left',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'light'
+        })
       })
-      toogleOpenCreateColumn()
-      setNewColumnTitle('')
-    })
-      .catch((error) => {
-        toast.error(error.message, {
+      .catch(err => {
+        return toast.error(err.response.data.message, {
           position: 'bottom-left',
           autoClose: 3000,
           hideProgressBar: false,
@@ -66,7 +93,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi, onGetDetai
         overflowY: 'hidden'
       }} >
         {columns?.map(column => (
-          < Column key={column?._id} column={column} createNewCardApi={createNewCardApi} onGetDetailBoard={onGetDetailBoard}/>
+          < Column key={column?._id} column={column} />
         ))}
         {openCreateColumn ?
           <Box sx={{
@@ -76,7 +103,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi, onGetDetai
             borderRadius: '6px',
             maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`,
             height: 'fit-content',
-            bgcolor: '#ffffff3d'
+            // bgcolor: '#ffffff3d'
           }}>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }} >
@@ -115,6 +142,7 @@ function ListColumns({ columns, createNewColumnApi, createNewCardApi, onGetDetai
                       bgcolor: (theme) => theme.palette.success.main
                     }
                   }}
+                  className={'interceptor-loading'}
                   onClick={addNewColumn}
                 >
                   Add column
