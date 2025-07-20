@@ -37,13 +37,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             {/* <PageLoadingSpinner caption={'Đang tải dữ liệu'} /> */}
             {/* </LoadingProvider> */}
             <App />
-<<<<<<< HEAD
-  {/* <LoadingOverlay show={false} /> */ }
-=======
-
->>>>>>> feature/update_menu_bar
           </ConfirmProvider >
-  <ToastContainer />
+          <ToastContainer />
         </CssVarsProvider >
       </PersistGate >
     </Provider >

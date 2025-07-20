@@ -65,16 +65,6 @@ export const theme = extendTheme({
     },
     MuiButton: {
       styleOverrides: {
-<<<<<<< HEAD
-        root: ({ theme }) => ({
-          fontSize: '1rem',
-          textTransform: 'none',
-          '&:hover': {
-            opacity: '0.4',
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.light,
-            transition: 'all 0.3s ease'
-=======
         root: {
           fontSize: '0.875rem',
           textTransform: 'none'
@@ -95,7 +85,6 @@ export const theme = extendTheme({
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: theme.palette.primary.main,
             borderWidth: '1px'// Change when focused
->>>>>>> feature/update_menu_bar
           }
         })
       }
