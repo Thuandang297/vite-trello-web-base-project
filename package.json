@@ -23,6 +23,7 @@
     "@mui/material": "^5.13.0",
     "@reduxjs/toolkit": "^2.0.1",
     "@tailwindcss/vite": "^4.0.17",
+    "antd": "^5.24.6",
     "axios": "^1.7.8",
     "cross-env": "^7.0.3",
     "http-status-codes": "^2.3.0",

@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
 import { StatusCodes } from 'http-status-codes'
-import { toast } from 'react-toastify'
 import { fetchRefreshTokenUserApi } from '~/apis'
 import { fetchLogoutUserApi } from '~/redux/users/userSlice'
 import { interceptorLoadingElements } from './formatter'
+import { setLoadingCircle } from '~/redux/common/commonSlice'
+import { useDispatch } from 'react-redux'
 
 let authorizeAxiosInstance = axios.create()
 authorizeAxiosInstance.defaults.timeout = 1000 * 60 * 10
 authorizeAxiosInstance.defaults.withCredentials = true
+
 
 //Không thể import store theo cách thông thường trong file js=> Sử dụng inject store
 let axiosReduxStore
@@ -17,6 +19,9 @@ export const injectStore = mainStore => {
   axiosReduxStore = mainStore
 }
 
+// const dispatch = useDispatch()
+
+
 // axiosInstance.interceptors.request.use(config => {
 //   config.headers.authorization = store.getState().auth.token
 //   return config
@@ -24,8 +29,11 @@ export const injectStore = mainStore => {
 
 //Can thiệp vào giữa các request nhận vào
 authorizeAxiosInstance.interceptors.request.use((config) => {
+  const dispatch = useDispatch()
   //Sử dụng kĩ thuật chặn spam click
   interceptorLoadingElements(true)
+  dispatch(setLoadingCircle(true))
+  //Xử lý khi call api thì mặc định sẽ tạo giao diện loading
   return config
 }, (error) => {
   return Promise.reject(error)
@@ -35,15 +43,23 @@ let requestTokenPromise = null
 // Add a response interceptor
 // Can thiệp vào giữa các response nhận về
 authorizeAxiosInstance.interceptors.response.use((response) => {
+  const dispatch = useDispatch()
+
   //Sử dụng kĩ thuật chặn spam click
   interceptorLoadingElements(false)
+  dispatch(setLoadingCircle(false))
+
   return response
 }, (error) => {
+  const dispatch = useDispatch()
+
   let errorMessage = error.message
   if (error?.response?.data?.message) {
     errorMessage = error.response.data.message
   }
   interceptorLoadingElements(false)
+  dispatch(setLoadingCircle(false))
+
   /*Xử lý việc refresh Token tự động
   TH1:Khi mã lỗi 401 thì thực hiện logout luôn
   TH2:Khi mã lỗi là 410 => hết hạn token

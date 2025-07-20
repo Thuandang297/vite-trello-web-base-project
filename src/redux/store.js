@@ -6,6 +6,7 @@ import { userReducer } from './users/userSlice'
 import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // Mặc định là localStorage
+import { commonReducer } from './common/commonSlice'
 
 // Cấu hình whitelist và blacklist
 const rootPersistConfig = {
@@ -18,7 +19,8 @@ const rootPersistConfig = {
 // Gộp reducers
 const reducers = combineReducers({
   activeBoard: activeBoardReducer,
-  user: userReducer
+  user: userReducer,
+  common: commonReducer
 })
 
 const persistedReducer = persistReducer(rootPersistConfig, reducers)
