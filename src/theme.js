@@ -1,6 +1,6 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
-const APP_BAR_HEIGHT = '58px'
+const APP_BAR_HEIGHT = '48px'
 const BOARD_BAR_HEIGHT = '60px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${APP_BAR_HEIGHT} - ${BOARD_BAR_HEIGHT})`
 const COLUMN_HEADER_HEIGHT = '50px'
@@ -27,10 +27,10 @@ export const theme = extendTheme({
     dark: {
       palette: {
         primary: {
-          main: '#086b58',
-          light: '#2d2d2d',
+          main: '#03a9f4',
+          light: '#fff',
           dark: '#333',
-          textColor: '#fff'
+          textColor: '#333'
         }
       }
     }
@@ -63,7 +63,7 @@ export const theme = extendTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          fontSize: '1rem',
+          fontSize: '0.875rem',
           textTransform: 'none'
         }
       }
@@ -117,7 +117,7 @@ export const theme = extendTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           '&.MuiCard-root': {
-            color: theme.palette.primary.textColor,
+            color: theme.palette.primary.main,
             backgroundColor: theme.palette.primary.light
           }
         })

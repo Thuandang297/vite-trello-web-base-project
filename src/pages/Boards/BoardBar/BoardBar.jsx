@@ -10,6 +10,8 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
+import { useSelector } from 'react-redux'
+import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { capitalizeFirstLetter } from '~/utils/formatter'
 const MENU_STYLE = {
   color: 'primary.main',
@@ -24,8 +26,8 @@ const MENU_STYLE = {
     bgcolor: 'primary.200'
   }
 }
-function BoardBar(props) {
-  const { board }=props
+function BoardBar() {
+  const board = useSelector(selectCurrentActiveBoard)
   return (
     <Box sx={{
       width: '100%',
@@ -36,7 +38,7 @@ function BoardBar(props) {
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
-      paddingX: '2rem',
+      paddingX: '1rem',
       borderTop: '1px solid #333'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }} gap={2} >
